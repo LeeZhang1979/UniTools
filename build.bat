@@ -1,0 +1,1 @@
+pyinstaller UniTools.spec --clean

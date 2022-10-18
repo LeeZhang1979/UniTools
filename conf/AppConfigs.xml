@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<AppConfigs>
+    <!-- 
+        AppCode: 不可为空，取值需要保持唯一
+        <![CDATA[ 未启用   
+            AppType：不可为空， 取值EXE,Excel,Word,PPT,Tool；
+                其中EXE表示当前程序相关组件，用来做升级用；
+                EXECL 
+                WORD
+                PPT
+                Resource表示本程序的其他组件（如资源、配置文件等）；
+                Tool表示主界面上所有按钮按照ID对照
+        ]]>
+        Icon：可为空，针对Apptype=Tool有效，可以做图标替换，只能是相对路径，必须包含在本程序目录下
+        Version: 不可为空，用来做版本升级控制：暂未考虑强制升级
+        PathType: 不可为空，枚举取值”Relative“： 相对路径/基于当前程序运行路径 或”Absolute“ 绝对路径/完整路径
+        Path:不可为空，具体文件名（包含相对或绝对路径）
+        Arguments：可为空，启动相关程序时需要带入的参数：暂未考虑单点登录等问题
+        AppStartupType：针对AppType=Resource无效，其它情况，不可为空；应用启动方式枚举值：
+                StaticCommandLine：直接调用Path启动,忽略Arguments；
+                StaticWebURL：http开始的URL地址用ie打开改地址iexplore.exe Path,忽略Arguments；
+                CommandLine：直接调用Path Arguments 启动；
+                InlineCode：内部应用直接调用对应Path方法（Arguments暂未实现）
+                WebURL：http开始的URL地址用ie打开改地址 iexplore.exe PathArguments(Arguments配置时前面需要自行配置&）
+                MockWebLogin：暂未实现
+                MockWinLogin：暂未实现
+
+    -->
+    <AppConfig AppCode="btnTool01" Icon=".\res\imgs\UniTools.ico" Version="1.0" PathType="Relative" Path="" Arguments="" AppStartupType="CommandLine">
+    </AppConfig>
+    <AppConfig AppCode="btnTool02" Icon=".\res\imgs\UniTools.ico" Version="1.0" PathType="Relative" Path="" Arguments="" AppStartupType="CommandLine">
+    </AppConfig>
+</AppConfigs>
