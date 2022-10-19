@@ -26,6 +26,11 @@ from ui.Ui_MDMForm import Ui_MDMForm
 class MDMForm(QMainWindow,Ui_MDMForm):
     
     def __tablesql(self):
+        """返回所有配置表的信息,用来对照Excel模板文件信息
+
+        Returns:
+            string: 查询表SQL语句
+        """        
         sql= 'SELECT object_id, \
                 object_name, \
                 object_name_cn, \
@@ -40,6 +45,14 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         return sql
 
     def __columnsql(self,id):
+        """指定表的列及对应excel内汉字名称
+
+        Args:
+            id (int): 配置的表ID
+
+        Returns:
+            string: SQL查询列信息
+        """
         sql= 'SELECT \
             object_name, \
             object_name_cn, \
@@ -56,6 +69,14 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         return sql
 
     def __columns(self,id):
+        """指定表的列及对应excel内汉字名称
+
+        Args:
+            id (int): 配置的表ID
+
+        Returns:
+            dict: 回指定表的列及对应excel内汉字名称字典
+        """        
         cols = dict()
         query = QSqlQuery()                
         if not query.exec(self.__columnsql(str(id))):
@@ -66,6 +87,14 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         return cols
     
     def __columnmap(self,id):
+        """指定表的列及对应excel内对应列
+
+        Args:
+            id (int): 配置的表ID
+
+        Returns:
+            dict:  回指定表的列及对应excel内对应excel的列
+        """        
         cols = dict()
         query = QSqlQuery()                
         if not query.exec(self.__columnsql(str(id))):
@@ -76,6 +105,15 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         return cols
     
     def __insertsql(self,columnmap,tbname):
+        """插入配置表语句
+
+        Args:
+            columnmap (dict): 配置表字段与Excel对应列
+            tbname (string): 配置表名
+
+        Returns:
+            string: 带参数的sql insert语句
+        """        
         sqlk = ''          
         sqlv = ''
         for k,v in columnmap.items():
@@ -151,7 +189,12 @@ class MDMForm(QMainWindow,Ui_MDMForm):
              QMessageBox.critical(self,'MDM', query.lastError().text())           
 
     def showData(self,id,name):
+        """绑定配置数据到界面
 
+        Args:
+            id (int): 配置表ID
+            name (string): 配置表名
+        """        
         cols = self.__columns(str(id))
         self.dataTableWidget.clear()
         self.dataTableWidget.setRowCount(0)

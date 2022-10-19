@@ -16,6 +16,12 @@
     <height>500</height>
    </size>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>1000</width>
+    <height>500</height>
+   </size>
+  </property>
   <property name="baseSize">
    <size>
     <width>1000</width>
@@ -28,7 +34,7 @@
   <widget class="QPushButton" name="btnTemplate">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>140</x>
      <y>400</y>
      <width>90</width>
      <height>23</height>
@@ -47,7 +53,7 @@
   <widget class="QPushButton" name="btnImport">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>140</x>
      <y>460</y>
      <width>90</width>
      <height>23</height>
@@ -66,7 +72,7 @@
   <widget class="QPushButton" name="btnExport">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>140</x>
      <y>430</y>
      <width>90</width>
      <height>23</height>
@@ -137,7 +143,7 @@
   <widget class="QLabel" name="dataLabel">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>250</x>
      <y>10</y>
      <width>711</width>
      <height>16</height>
@@ -308,7 +314,7 @@
   <widget class="QPushButton" name="btnUpdate">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>460</y>
      <width>121</width>
      <height>23</height>
