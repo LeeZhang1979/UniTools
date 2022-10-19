@@ -9,6 +9,7 @@ import sys
 from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
 from PyQt5.QtGui import QPalette, QBrush, QPixmap, QIcon
 from src.MDMForm import MDMForm 
+from src.PowerCableForm import PowerCableForm
 BASE_DIR= os.path.dirname(os.path.dirname(os.path.abspath(__file__) ) )
 sys.path.append( BASE_DIR  )   
 from ui.Ui_MainWindow import Ui_MainWindow 
@@ -25,7 +26,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     
     def setUiEx(self):
         palette = QPalette()
-        appPath=os.path.join(BASE_DIR,u'res\\imgs\\small.bmp')
+        appPath=os.path.join(BASE_DIR,u'res\\imgs\\small.png')
         palette.setBrush(QPalette.Background, QBrush(QPixmap(appPath)))        
         self.setPalette(palette)
         icon = QIcon()
@@ -43,8 +44,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         #conffile = os.path.join(BASE_DIR,'data\\AppConfigs.xml')
         #self.appEvent.loadConf(conffile)
         self.btnTool01.clicked.connect(self.tool01Click)
-        self.btnMDMConf.clicked.connect(self.mdmconfClick)
+        self.btnMDMConf.clicked.connect(self.menuConfigure)
         self.actionConfigure.triggered.connect(self.menuConfigure)
+        self.actionPowerCableCal.triggered.connect(self.menuPowerCableCal)
 
     def tool01Click(self):
 
@@ -54,10 +56,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         #os.startfile(appPath)
         #QMessageBox.information(self,"提示框","复制成功")
     
-    def mdmconfClick(self):         
-        self.mdmWin = MDMForm()
-        self.mdmWin.show()
-
     def menuConfigure(self):
         self.mdmWin = MDMForm()
         self.mdmWin.show()
+
+    def menuPowerCableCal(self):
+        self.pcWin = PowerCableForm()       
+        self.pcWin.show()

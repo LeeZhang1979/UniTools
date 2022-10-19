@@ -12,8 +12,7 @@ from PyQt5.QtWidgets import QMainWindow,QMessageBox,QTableWidgetItem,QFileDialog
 from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlQuery
 
-from openpyxl import load_workbook,Workbook
-from openpyxl.utils import column_index_from_string,get_column_letter
+from openpyxl import load_workbook,Workbook 
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -135,7 +134,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setUiEx()
+        self.setupUiEx()
         self.addConnect()
         self.db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName(os.path.join(BASE_DIR,'db\\mdm.db'))
@@ -152,7 +151,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         if self.db.isOpen:
             self.db.close()
 
-    def setUiEx(self):
+    def setupUiEx(self):
         palette = QPalette()
         icon = QIcon()
         appPath=os.path.join(BASE_DIR,u'res\\imgs\\mdmconf.ico')

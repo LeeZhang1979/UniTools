@@ -54,7 +54,10 @@ class Ui_MainWindow(object):
         self.MenuMDM.setObjectName("MenuMDM")
         self.actionConfigure = QtWidgets.QAction(MainWindow)
         self.actionConfigure.setObjectName("actionConfigure")
+        self.actionPowerCableCal = QtWidgets.QAction(MainWindow)
+        self.actionPowerCableCal.setObjectName("actionPowerCableCal")
         self.menuTool.addAction(self.actionConfigure)
+        self.menu.addAction(self.actionPowerCableCal)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menuTool.menuAction())
 
@@ -71,3 +74,4 @@ class Ui_MainWindow(object):
         self.menu.setTitle(_translate("MainWindow", "通用工具"))
         self.MenuMDM.setText(_translate("MainWindow", "基础数据配置"))
         self.actionConfigure.setText(_translate("MainWindow", "基础数据配置"))
+        self.actionPowerCableCal.setText(_translate("MainWindow", "动力电缆计算"))

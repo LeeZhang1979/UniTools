@@ -93,6 +93,7 @@
     <property name="title">
      <string>通用工具</string>
     </property>
+    <addaction name="actionPowerCableCal"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuTool"/>
@@ -106,6 +107,11 @@
   <action name="actionConfigure">
    <property name="text">
     <string>基础数据配置</string>
+   </property>
+  </action>
+  <action name="actionPowerCableCal">
+   <property name="text">
+    <string>动力电缆计算</string>
    </property>
   </action>
  </widget>
