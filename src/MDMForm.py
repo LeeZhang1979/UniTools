@@ -142,7 +142,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             if not self.db.open():               
                 QMessageBox.critical(self, 'MDM', self.db.lastError().text())
                 return
-        self.initdata()     
+        self.initData()     
         if self.MDMListWidget.count()>0:
             self.MDMListWidget.setCurrentItem(self.MDMListWidget.item(0))
             self.mdmListClick()
@@ -165,7 +165,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         self.btnExport.clicked.connect(self.exportClick)
         self.btnUpdate.clicked.connect(self.updateClick)
         
-    def initdata(self): 
+    def initData(self): 
         self.MDMListWidget.clear()
         query = QSqlQuery()
         if query.exec(self.__tablesql()):
@@ -257,6 +257,9 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         qItem=self.MDMListWidget.currentItem()
         tconfs = dict(qItem.data(1))        
         sheetName = str(tconfs['template_sheet'])
+        if QMessageBox.question(self, 'MDM', '确认更新模板配置表[' +sheetName + ']的数据?',QMessageBox.Yes|QMessageBox.No) == QMessageBox.No:
+            return
+
         startRow = 2  #默认没有设置起始值，则默认从第二行开始（第一行为标题）
         if str(tconfs['start_row']).isdigit():
             startRow=int(str(tconfs['start_row']))                    
@@ -269,7 +272,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         try:  
             wb= load_workbook(fNames[0],True)                         
             if not (wb.sheetnames.index(sheetName) >= 0):
-                QMessageBox.warning(self,'MDM', '选择的文件:' + fNames[0] + ',未包含配置指定的Sheet[' + str(tconfs['template_sheet'] + ']'))
+                QMessageBox.warning(self,'MDM', '选择的文件:' + fNames[0] + ',未包含配置指定的Sheet[' +sheetName + ']')
                 wb.close()
                 return        
             
@@ -368,6 +371,10 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         tempfile=os.path.join(BASE_DIR,str(tconfs['template_file']))
 
         sheetName = str(tconfs['template_sheet'])   
+        
+        if QMessageBox.question(self, 'MDM', '确认更新本地模板文件:' + tempfile + ',配置表[' + sheetName + ']的数据?',QMessageBox.Yes|QMessageBox.No) == QMessageBox.No:
+            return
+
         startRow = 2  #默认没有设置起始值，则默认从第二行开始（第一行为标题）
         if str(tconfs['start_row']).isdigit():
             startRow=int(str(tconfs['start_row']))                    
@@ -379,7 +386,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             column = self.__columns(str(tconfs['object_id']))         
             wb = load_workbook(tempfile,False) 
             if not (wb.sheetnames.index(sheetName) >= 0):
-                QMessageBox.warning(self,'MDM', '选择的文件:' + sheetName + ',未包含配置指定的Sheet[' + str(tconfs['template_sheet'] + ']'))
+                QMessageBox.warning(self,'MDM', '选择的文件:' + tempfile + ',未包含配置指定的Sheet[' + sheetName + ']')
                 wb.close()
                 return        
             ws=wb[sheetName]     
@@ -415,7 +422,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
                 iRow += 1            
             wb.save(tempfile)
             wb.close
-            QMessageBox.information(self,'MDM','更新模板文件数据' + tempfile)    
+            QMessageBox.information(self,'MDM','更新模板文件数据:' + tempfile + '完成')    
             
         except: 
             QMessageBox.information(self,'MDM','更新模板文件数据失败，可能是文件类型错误') 

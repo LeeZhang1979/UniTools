@@ -18,7 +18,7 @@
     --还有更多适合Python开发的扩展，可自行搜索安装，Pylance 等不建议安装（这个强制代码书写规范），部分AI的扩展也不要装，影响性能
 
 --其它扩展
-    SQLite: alexcvzz的版本，安装后可以在VSCode中 按F1进入名利窗口，输入SQLite调出所有SQLite命令，可以打开 数据库查看MDM数据库内表的内容
+    SQLite: alexcvzz的版本，安装后可以在VSCode中 按F1进入命令窗口，输入SQLite调出所有SQLite命令，可以选择打开数据库命令 数据库查看MDM数据库内表的内容
     PYQT Integration （后面安装pyqt5后，再进行以下配置）
         VS Code左下角的 管理->设置, 在设置界面查询里面输入 pyqt-integration, 选择查询出来的 pyqt-integration 扩展
         在配置项目里调整:

@@ -5,9 +5,10 @@
 
 import os 
 import sys 
-from PyQt5 import QtCore, QtGui, QtWidgets 
-from PyQt5.QtGui import QPalette, QPixmap, QIcon, QImage
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPalette, QPixmap, QIcon, QImage, QIntValidator, QDoubleValidator, QRegExpValidator
 from PyQt5.QtWidgets import QMainWindow,QMessageBox,QTableWidgetItem,QFileDialog
+from PyQt5.QtCore import QRegExp
 
 from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlQuery
@@ -28,6 +29,17 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.setupUi(self)
         self.setupUiEx()
         self.addConnect()
+        self.db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
+        self.db.setDatabaseName(os.path.join(BASE_DIR,'db\\mdm.db'))
+        if not self.db.isOpen():
+            if not self.db.open():               
+                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                return
+        self.initData()
+
+    def closeEvent(self, QCloseEvent):   
+        if self.db.isOpen:
+            self.db.close()            
     
     def closeEvent(self, QCloseEvent):
         return 
@@ -47,7 +59,6 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.cmbCrossType.setItemIcon(4, QIcon(os.path.join(BASE_DIR,u'res\\imgs\\signle_3core_ft.png')))
         self.cmbCrossType.setItemIcon(5, QIcon(os.path.join(BASE_DIR,u'res\\imgs\\single_3core_hs.png')))
         self.cmbCrossType.setItemIcon(6, QIcon(os.path.join(BASE_DIR,u'res\\imgs\\single_3core_vs.png')))
-
         self.refreshLayingPic()
 
     def refreshLayingPic(self):
@@ -72,13 +83,96 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.lblLayingImg.setScaledContents(True)
 
     def addConnect(self):
+        #发动机单绕组电流(A) 5位以内>0整数
+        intReg = QRegExp('^[1-9][0-9]{1,4}')
+        regExpValidator = QRegExpValidator(intReg)
+        self.lineEEC.setValidator(regExpValidator)
+        #绕组数 3位以内>0整数
+        intReg = QRegExp('^[1-9][0-9]{1,2}')
+        regExpValidator = QRegExpValidator(intReg) 
+        self.lineEWings.setValidator(regExpValidator) 
+        #标称截面积(㎜²) 5位以内>=0浮点数 +2位小数
+        floatReg = QRegExp('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
+        regExpValidator = QRegExpValidator(floatReg)
+        self.lineECS.setValidator(regExpValidator) 
+        #环温(°C)  4位以内>=0整数
+        intReg = QRegExp('^([0]|[1-9][0-9]{1,3})')
+        regExpValidator = QRegExpValidator(intReg)
+        self.lineEAmbientT.setValidator(regExpValidator)  
+        #护套耐温(°C) 4位以内>=0整数
+        intReg = QRegExp('^([0]|[1-9][0-9]{1,3})')
+        regExpValidator = QRegExpValidator(intReg)  
+        self.lineESTR.setValidator(regExpValidator)   
+        #托盘/梯架数 1,2,3
+        intReg = QRegExp('[1-3]?')
+        regExpValidator = QRegExpValidator(intReg)  
+        self.lineENumber.setValidator(regExpValidator)  
+        #三相回路数 1,2,3
+        intReg = QRegExp('[1-3]?')
+        regExpValidator = QRegExpValidator(intReg)  
+        self.lineECircuits.setValidator(regExpValidator)   
 
         self.rbTouch.clicked.connect(self.refreshLayingPic)
         self.rbSpace.clicked.connect(self.refreshLayingPic)
         self.cmbLayingType.currentIndexChanged.connect(self.refreshLayingPic)
-        
-        
-        return
+        self.btnCalculation.clicked.connect(self.btnCalculationClick)
     
-    def initdata(self): 
-        return
+    def initData(self): 
+        self.cleanResult()
+
+    def cleanResult(self):
+        #载流量值
+        self.lblOECNum.setText('')
+        #敷设系数
+        self.lblOACF.setText('')
+        #折算系数
+        self.lblOCFnum.setText('')
+        #单绕组电缆根数
+        self.lblOSNum.setText('')
+        #向上取整
+        self.lblOSNumUp.setText('')   
+        #单相电缆根数
+        self.lblOSDNum.setText('')     
+        #单绕组电流余量
+        self.lblOECLeftNum.setText('')
+        #余量百分比
+        self.lblOECPer.setText('')
+
+    def btnCalculationClick(self):
+        self.cleanResult()
+        
+        #电缆类型
+        self.cmbPCType.currentText()
+        #发动机单绕组电流(A)
+        self.lineEEC.text() 
+        #绕组数
+        self.lineEWings.text()
+        #导体
+        self.cmbConductor.currentText()
+        #标称截面积(㎜²)
+        self.lineECS.text()
+        #绝缘材料
+        self.cmbMaterial.currentText()
+        #环温(°C)
+        self.lineEAmbientT.text()
+        #护套耐温(°C)
+        self.lineESTR.text()
+        #电缆芯数及排列
+        self.cmbCrossType.currentText()
+        #敷设方式
+        self.cmbLayingType.currentText()
+        #相互接触
+        self.rbTouch.isChecked()
+        self.rbTouch.text()
+        #有间距
+        self.rbSpace.isChecked()
+        self.rbSpace.text()        
+        #托盘/梯架数
+        self.lineENumber.text()
+        #三相回路数
+        self.lineECircuits.text()
+
+        #列表
+        self.tblList.items().clear()
+
+

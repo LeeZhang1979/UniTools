@@ -6,20 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>480</height>
+    <width>770</width>
+    <height>440</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>850</width>
-    <height>480</height>
+    <width>770</width>
+    <height>440</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1920</width>
     <height>1080</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>770</width>
+    <height>440</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -29,9 +35,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
-     <width>81</width>
-     <height>16</height>
+     <y>165</y>
+     <width>61</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
@@ -41,7 +47,16 @@
     </font>
    </property>
    <property name="text">
-    <string>电缆芯数排列</string>
+    <string>电缆芯数及排列</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+   <property name="buddy">
+    <cstring>cmbCrossType</cstring>
    </property>
   </widget>
   <widget class="QLabel" name="lblI03">
@@ -49,8 +64,8 @@
     <rect>
      <x>10</x>
      <y>70</y>
-     <width>47</width>
-     <height>13</height>
+     <width>51</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -69,9 +84,9 @@
   <widget class="QLineEdit" name="lineECS">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>290</x>
      <y>70</y>
-     <width>41</width>
+     <width>80</width>
      <height>20</height>
     </rect>
    </property>
@@ -81,8 +96,14 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="inputMask">
+    <string/>
+   </property>
    <property name="text">
     <string>300</string>
+   </property>
+   <property name="maxLength">
+    <number>5</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -91,10 +112,10 @@
   <widget class="QLabel" name="lblI04">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>180</x>
      <y>70</y>
-     <width>91</width>
-     <height>16</height>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -115,8 +136,8 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>141</width>
-     <height>16</height>
+     <width>131</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -135,9 +156,9 @@
   <widget class="QLineEdit" name="lineEEC">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>140</x>
      <y>40</y>
-     <width>61</width>
+     <width>71</width>
      <height>20</height>
     </rect>
    </property>
@@ -147,8 +168,14 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="inputMask">
+    <string/>
+   </property>
    <property name="text">
     <string>1600</string>
+   </property>
+   <property name="maxLength">
+    <number>5</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -157,10 +184,10 @@
   <widget class="QComboBox" name="cmbPCType">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>70</x>
      <y>10</y>
-     <width>171</width>
-     <height>20</height>
+     <width>301</width>
+     <height>22</height>
     </rect>
    </property>
    <property name="font">
@@ -196,8 +223,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>91</width>
-     <height>16</height>
+     <width>61</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -218,7 +245,7 @@
     <rect>
      <x>70</x>
      <y>70</y>
-     <width>71</width>
+     <width>80</width>
      <height>22</height>
     </rect>
    </property>
@@ -244,8 +271,8 @@
     <rect>
      <x>10</x>
      <y>100</y>
-     <width>61</width>
-     <height>16</height>
+     <width>60</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -266,7 +293,7 @@
     <rect>
      <x>70</x>
      <y>100</y>
-     <width>71</width>
+     <width>301</width>
      <height>22</height>
     </rect>
    </property>
@@ -278,27 +305,32 @@
    </property>
    <item>
     <property name="text">
-     <string>PVC</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
      <string>XLPE/EPR</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>矿物绝缘</string>
+     <string>PVC</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>矿物绝缘(PVC外护套与易于接触的裸护套70℃)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>矿物绝缘(不允许接触的裸护套105℃)</string>
     </property>
    </item>
   </widget>
   <widget class="QLabel" name="lblI06">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>100</y>
-     <width>81</width>
-     <height>16</height>
+     <x>190</x>
+     <y>130</y>
+     <width>91</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -317,9 +349,9 @@
   <widget class="QLineEdit" name="lineESTR">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>100</y>
-     <width>41</width>
+     <x>290</x>
+     <y>130</y>
+     <width>80</width>
      <height>20</height>
     </rect>
    </property>
@@ -329,8 +361,11 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="inputMask">
+    <string/>
+   </property>
    <property name="text">
-    <string>90</string>
+    <string>5</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -339,9 +374,9 @@
   <widget class="QComboBox" name="cmbCrossType">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>70</x>
      <y>160</y>
-     <width>241</width>
+     <width>301</width>
      <height>64</height>
     </rect>
    </property>
@@ -421,10 +456,10 @@
   <widget class="QLabel" name="lblI08">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>130</y>
-     <width>41</width>
-     <height>16</height>
+     <x>230</x>
+     <y>40</y>
+     <width>51</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -443,9 +478,9 @@
   <widget class="QLineEdit" name="lineEWings">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>130</y>
-     <width>61</width>
+     <x>290</x>
+     <y>40</y>
+     <width>80</width>
      <height>20</height>
     </rect>
    </property>
@@ -455,8 +490,14 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="inputMask">
+    <string/>
+   </property>
    <property name="text">
     <string>2</string>
+   </property>
+   <property name="maxLength">
+    <number>2</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -465,10 +506,10 @@
   <widget class="QLabel" name="lblI09">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>380</x>
      <y>10</y>
      <width>61</width>
-     <height>16</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -480,38 +521,13 @@
    <property name="text">
     <string>敷设方式</string>
    </property>
-   <property name="buddy">
-    <cstring>cmbLayingType</cstring>
-   </property>
   </widget>
   <widget class="QLabel" name="lblI10">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>10</x>
      <y>130</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>敷设温度(°C)</string>
-   </property>
-   <property name="buddy">
-    <cstring>lineEAmbientT</cstring>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEAmbientT">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>130</y>
-     <width>41</width>
+     <width>51</width>
      <height>20</height>
     </rect>
    </property>
@@ -522,7 +538,32 @@
     </font>
    </property>
    <property name="text">
-    <string>30</string>
+    <string>环温(°C)</string>
+   </property>
+   <property name="buddy">
+    <cstring>lineEAmbientT</cstring>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEAmbientT">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>130</y>
+     <width>80</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="inputMask">
+    <string/>
+   </property>
+   <property name="text">
+    <string>5</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -531,9 +572,9 @@
   <widget class="QComboBox" name="cmbLayingType">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>450</x>
      <y>10</y>
-     <width>181</width>
+     <width>150</width>
      <height>22</height>
     </rect>
    </property>
@@ -562,10 +603,10 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>40</y>
-     <width>111</width>
-     <height>51</height>
+     <x>380</x>
+     <y>35</y>
+     <width>91</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">
@@ -622,9 +663,9 @@
   <widget class="QLineEdit" name="lineENumber">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>100</y>
-     <width>41</width>
+     <x>560</x>
+     <y>40</y>
+     <width>40</width>
      <height>20</height>
     </rect>
    </property>
@@ -634,8 +675,14 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="inputMask">
+    <string/>
+   </property>
    <property name="text">
-    <string>1</string>
+    <string>2</string>
+   </property>
+   <property name="maxLength">
+    <number>1</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -644,10 +691,10 @@
   <widget class="QLabel" name="lblI11">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>100</y>
+     <x>480</x>
+     <y>40</y>
      <width>80</width>
-     <height>16</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -666,9 +713,9 @@
   <widget class="QLineEdit" name="lineECircuits">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>130</y>
-     <width>41</width>
+     <x>560</x>
+     <y>70</y>
+     <width>40</width>
      <height>20</height>
     </rect>
    </property>
@@ -678,8 +725,14 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="inputMask">
+    <string/>
+   </property>
    <property name="text">
-    <string>1</string>
+    <string>2</string>
+   </property>
+   <property name="maxLength">
+    <number>1</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -688,10 +741,10 @@
   <widget class="QLabel" name="lblI12">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>130</y>
+     <x>480</x>
+     <y>70</y>
      <width>80</width>
-     <height>16</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -707,212 +760,11 @@
     <cstring>lineECircuits</cstring>
    </property>
   </widget>
-  <widget class="QLabel" name="lblO01">
+  <widget class="QLabel" name="lblO04">
    <property name="geometry">
     <rect>
      <x>600</x>
-     <y>50</y>
-     <width>120</width>
-     <height>13</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>电缆类型</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblO3">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>110</y>
-     <width>120</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>电缆型号</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblO02">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>70</y>
-     <width>120</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>变流器单绕组电流</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblO5">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>160</y>
-     <width>120</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>敷设温度</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblO4">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>140</y>
-     <width>120</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>绕组数</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblO06">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>190</y>
-     <width>120</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>排布方式</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblOPCType">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>50</y>
-     <width>100</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>机侧动力电缆</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblOEC">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>80</y>
-     <width>100</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>1600A</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblOPCM">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>110</y>
-     <width>100</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>300方 90° 铜</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblOWings">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>130</y>
+     <y>100</y>
      <width>100</width>
      <height>20</height>
     </rect>
@@ -924,19 +776,69 @@
     </font>
    </property>
    <property name="text">
-    <string>2</string>
+    <string>单绕组电缆根数</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblO06">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>140</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>单相电缆根数</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="lblOAmbientT">
+  <widget class="QLabel" name="lblO05">
    <property name="geometry">
     <rect>
-     <x>730</x>
+     <x>600</x>
+     <y>120</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>向上取整</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblO07">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
      <y>160</y>
      <width>100</width>
-     <height>16</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -946,19 +848,19 @@
     </font>
    </property>
    <property name="text">
-    <string>30°</string>
+    <string>单绕组电流余量</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="lblArrangeType">
+  <widget class="QLabel" name="lblO08">
    <property name="geometry">
     <rect>
-     <x>730</x>
+     <x>600</x>
      <y>180</y>
      <width>100</width>
-     <height>51</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -968,10 +870,120 @@
     </font>
    </property>
    <property name="text">
-    <string>有孔托盘相互接触(1层1回路)</string>
+    <string>余量百分比</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOSNum">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>100</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>2.20</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOSNumUp">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>120</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>3</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOSDNum">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>140</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>6</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOECLeftNum">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>160</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>578.54</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOECPer">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>180</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>15%</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
@@ -981,9 +993,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>260</y>
-     <width>831</width>
-     <height>211</height>
+     <y>240</y>
+     <width>751</width>
+     <height>200</height>
     </rect>
    </property>
    <property name="font">
@@ -991,6 +1003,9 @@
      <family>Microsoft YaHei UI</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::DoubleClicked|QAbstractItemView::SelectedClicked</set>
    </property>
    <column>
     <property name="text">
@@ -1000,6 +1015,11 @@
    <column>
     <property name="text">
      <string>发动机单绕组电流(A)</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>绕组数</string>
     </property>
    </column>
    <column>
@@ -1019,17 +1039,12 @@
    </column>
    <column>
     <property name="text">
+     <string>环温(°C)</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
      <string>护套耐温(°C)</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>绕组数</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>敷设温度(°C)</string>
     </property>
    </column>
    <column>
@@ -1063,8 +1078,8 @@
     <rect>
      <x>620</x>
      <y>10</y>
-     <width>171</width>
-     <height>31</height>
+     <width>131</width>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -1080,10 +1095,10 @@
   <widget class="QPushButton" name="btnAdd">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>230</y>
+     <x>520</x>
+     <y>100</y>
      <width>75</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -1099,10 +1114,10 @@
   <widget class="QPushButton" name="btnUpdate">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>230</y>
+     <x>520</x>
+     <y>130</y>
      <width>75</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -1115,32 +1130,13 @@
     <string>更新选中行</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnExport">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>230</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>清空列表</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnDelete">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>230</y>
+     <x>520</x>
+     <y>160</y>
      <width>75</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -1153,13 +1149,13 @@
     <string>删除选中行</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnMDMT">
+  <widget class="QPushButton" name="btnExport">
    <property name="geometry">
     <rect>
      <x>520</x>
-     <y>230</y>
+     <y>190</y>
      <width>75</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -1175,8 +1171,8 @@
   <widget class="QLabel" name="lblLayingImg">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>40</y>
+     <x>390</x>
+     <y>110</y>
      <width>111</width>
      <height>113</height>
     </rect>
@@ -1215,18 +1211,158 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="lblOECNum">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>40</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>741</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblO01">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>40</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>载流量值</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblO02">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>60</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>折算系数</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOCFnum">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>60</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>1</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblO03">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>80</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>敷设系数</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOACF">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>80</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0.98</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>cmbPCType</tabstop>
   <tabstop>lineEEC</tabstop>
+  <tabstop>lineEWings</tabstop>
   <tabstop>cmbConductor</tabstop>
   <tabstop>lineECS</tabstop>
   <tabstop>cmbMaterial</tabstop>
-  <tabstop>lineESTR</tabstop>
-  <tabstop>lineEWings</tabstop>
-  <tabstop>cmbCrossType</tabstop>
-  <tabstop>cmbLayingType</tabstop>
   <tabstop>lineEAmbientT</tabstop>
+  <tabstop>lineESTR</tabstop>
+  <tabstop>cmbCrossType</tabstop>
   <tabstop>rbTouch</tabstop>
   <tabstop>rbSpace</tabstop>
   <tabstop>lineENumber</tabstop>
@@ -1236,7 +1372,6 @@
   <tabstop>btnUpdate</tabstop>
   <tabstop>btnDelete</tabstop>
   <tabstop>btnExport</tabstop>
-  <tabstop>btnMDMT</tabstop>
   <tabstop>tblList</tabstop>
  </tabstops>
  <resources/>
