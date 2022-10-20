@@ -5,10 +5,11 @@
 
 import os 
 import sys 
+import math
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPalette, QPixmap, QIcon, QImage, QIntValidator, QDoubleValidator, QRegExpValidator
 from PyQt5.QtWidgets import QMainWindow,QMessageBox,QTableWidgetItem,QFileDialog
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp 
 
 from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlQuery
@@ -118,7 +119,89 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.btnCalculation.clicked.connect(self.btnCalculationClick)
     
     def initData(self): 
-        self.cleanResult()
+        self.cleanResult()        
+        self.tblList.clearContents()
+        self.tblList.setRowCount(0)
+    
+    def isNumber(self,s):
+        if s.count(".")==1:  #小数的判断
+            if s[0]=="-":
+                s=s[1:]
+            if s[0]==".":
+                return False
+            s=s.replace(".","")
+            for i in s:
+                if i not in "0123456789":
+                    return False
+            return True
+        elif s.count(".")==0:  #整数的判断
+            if s[0]=="-":
+                s=s[1:]
+            for i in s:
+                if i not in "0123456789":
+                    return False
+            return True
+        else:
+            return False
+
+    def __ampacitySQL(self, conductor,material,sheathtr,crosssection):
+        sql= 'select conductor, \
+            material, \
+            sheath_tr, \
+            ambientt, \
+            cross_section, \
+            multi_2core, \
+            multi_3core, \
+            single_2core_t, \
+            single_3core_t, \
+            signle_3core_ft, \
+            single_3core_hs, \
+            single_3core_vs \
+            from ampacity \
+            where ambientt=\'30\' and \
+            conductor = \''
+        sql += conductor
+        sql += '\' and material = \''
+        sql += material 
+        sql += '\' and sheath_tr = \''        
+        sql += sheathtr 
+        sql += '\' and cross_section = \''        
+        sql += crosssection 
+        sql += '\'' 
+        return sql
+    
+    def __ambienttcfSQL(self, insulatedType,ambientt):
+        sql= 'select insulated_type, \
+            ambientt, \
+            pvc, \
+            xlpe_epr, \
+            mineral_ipvct, \
+            mineral_ic \
+            from ambienttcf \
+            where insulated_type = \''
+        sql += insulatedType
+        sql += '\' and ambientt = \''
+        sql += ambientt 
+        sql += '\'' 
+        return sql
+
+    def __layingcfSQL(self,layingtype,touchtype,layingcount):
+        sql= 'select laying_type, \
+            touch_type, \
+            laying_count, \
+            circuits_laying1, \
+            circuits_laying2, \
+            circuits_laying3, \
+            remark \
+            from layingcf \
+            where laying_type = \''
+        sql += layingtype
+        sql += '\' and touch_type = \''
+        sql += touchtype 
+        sql += '\' and laying_count = \''        
+        sql += layingcount 
+        sql += '\'' 
+        return sql
 
     def cleanResult(self):
         #载流量值
@@ -140,39 +223,141 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
 
     def btnCalculationClick(self):
         self.cleanResult()
-        
+        strPara = ''
         #电缆类型
         self.cmbPCType.currentText()
         #发动机单绕组电流(A)
-        self.lineEEC.text() 
+        if self.isNumber(self.lineEEC.text()):
+            paraX = float(self.lineEEC.text() )
         #绕组数
-        self.lineEWings.text()
-        #导体
-        self.cmbConductor.currentText()
-        #标称截面积(㎜²)
-        self.lineECS.text()
-        #绝缘材料
-        self.cmbMaterial.currentText()
-        #环温(°C)
-        self.lineEAmbientT.text()
-        #护套耐温(°C)
-        self.lineESTR.text()
-        #电缆芯数及排列
-        self.cmbCrossType.currentText()
-        #敷设方式
-        self.cmbLayingType.currentText()
-        #相互接触
-        self.rbTouch.isChecked()
-        self.rbTouch.text()
-        #有间距
-        self.rbSpace.isChecked()
-        self.rbSpace.text()        
-        #托盘/梯架数
-        self.lineENumber.text()
-        #三相回路数
-        self.lineECircuits.text()
+        if self.isNumber(self.lineEWings.text()):
+            paraC = float(self.lineEWings.text())
 
-        #列表
-        self.tblList.items().clear()
+        #Query ampacity Table
+        #导体
+        conductor = self.cmbConductor.currentText()
+        #标称截面积(㎜²)
+        crosssection = self.lineECS.text()
+        #绝缘材料
+        material = self.cmbMaterial.currentText()
+        #护套耐温(°C)
+        sheathtr = self.lineESTR.text()
+        #电缆芯数及排列
+        #self.cmbCrossType.currentText()
+        paraY = float(1.0)
+        query = QSqlQuery()
+        if query.exec(self.__ampacitySQL(conductor,material,sheathtr,crosssection)):
+            while query.next():
+                if self.cmbCrossType.currentIndex() == 0:
+                    strPara = str(query.value('multi_2core'))
+                elif self.cmbCrossType.currentIndex() == 1:
+                    strPara = str(query.value('multi_3core'))
+                elif self.cmbCrossType.currentIndex() == 2:
+                    strPara = str(query.value('single_2core_t'))
+                elif self.cmbCrossType.currentIndex() == 3:
+                    strPara = str(query.value('single_3core_t'))
+                elif self.cmbCrossType.currentIndex() == 4:
+                    strPara = str(query.value('signle_3core_ft'))
+                elif self.cmbCrossType.currentIndex() == 5:
+                    strPara = str(query.value('single_3core_hs'))
+                elif self.cmbCrossType.currentIndex() == 6:
+                    strPara = str(query.value('single_3core_vs'))
+        else:
+            QMessageBox.critical(self,'动力电缆计算', query.lastError().text())  
+            return
+        if self.isNumber(strPara):
+            paraY = float(strPara)        
+        elif strPara == '\\':
+            paraY = 1.0
+
+        #Query ambienttcf Table
+        insulatedType = u'绝缘'
+        #环温(°C)
+        ambientt = self.lineEAmbientT.text()
+
+        strPara = ''
+        paraA = float(0.0)
+        if query.exec(self.__ambienttcfSQL(insulatedType,ambientt)):
+            while query.next():
+                if self.cmbMaterial.currentIndex() == 0:
+                    strPara = str(query.value('pvc'))
+                elif self.cmbMaterial.currentIndex() == 1:
+                    strPara = str(query.value('xlpe_epr'))
+                elif self.cmbMaterial.currentIndex() == 2:
+                    strPara = str(query.value('mineral_ipvct'))
+                elif self.cmbMaterial.currentIndex() == 3:
+                    strPara = str(query.value('mineral_ic'))
+        else:
+            QMessageBox.critical(self,'动力电缆计算', query.lastError().text())  
+            return
+        
+        if self.isNumber(strPara):
+            paraA = float(strPara)
+        elif strPara == '\\':
+            paraA = 1.0
+        #Query layingcf Table
+        #敷设方式
+        layingtype = self.cmbLayingType.currentText()
+        #相互接触
+        touchtype = ''
+        if self.rbTouch.isChecked():
+            touchtype = self.rbTouch.text()
+        elif self.rbSpace.isChecked():
+            #有间距
+            touchtype = self.rbSpace.text()
+         
+        #托盘/梯架数
+        layingcount = self.lineENumber.text()
+        
+        #三相回路数
+        circuitslaying = self.lineECircuits.text() 
+        strPara = ''
+        paraB = float(0.0)
+        if query.exec(self.__layingcfSQL(layingtype,touchtype,layingcount)):
+            while query.next(): 
+                if circuitslaying == '1':
+                    strPara = str(query.value('circuits_laying1'))
+                elif circuitslaying == '2':
+                    strPara = str(query.value('circuits_laying2'))
+                elif circuitslaying == '3':
+                    strPara = str(query.value('circuits_laying3'))
+        else:
+            QMessageBox.critical(self,'动力电缆计算', query.lastError().text())  
+            return
+        if self.isNumber(strPara):
+            paraB = float(strPara)
+        elif strPara == '\\':
+            paraB = 1.0
+         
+        temp = float(1.0)
+        temp *= paraY 
+        temp *= paraA
+        temp *= paraB 
+
+        paraZ = round(paraX / temp,2)
+        #向上取整
+        paraD = math.ceil(paraZ)
+        paraF = round(paraD * paraC,2)
+        paraE = round(paraD * temp - paraA,2) 
+        paraP = round(paraE / paraX ,4)  
+
+        self.lblOECNum.setText(str(paraY))
+        self.lblOCFnum.setText(str(paraA))
+        self.lblOACF.setText(str(paraB))
+        self.lblOSNum.setText(str(paraZ))
+        self.lblOSNumUp.setText(str(paraD))
+        self.lblOSDNum.setText(str(paraF))
+        self.lblOECLeftNum.setText(str(paraE))
+        self.lblOECPer.setText(f'{round(paraP*100,2)}%')
+
+        '''
+        #列表        
+        rows=self.dataTableWidget.rowCount()
+        self.dataTableWidget.insertRow(rows)
+        qtitem=QTableWidgetItem('')
+        self.dataTableWidget.setItem(rows,1,qtitem)
+        qtitem.setData(QtCore.Qt.ItemDataRole.UserRole, '') 
+        '''
+
 
 

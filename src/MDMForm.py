@@ -180,7 +180,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
                 cols['template_sheet'] = query.value('template_sheet')
                 cols['start_row'] = query.value('start_row')
                 cols['end_row'] = query.value('end_row')
-                qItem.setData(1,cols)                
+                qItem.setData(QtCore.Qt.ItemDataRole.UserRole,cols)                
                 qItem.setText(query.value('object_name_cn')) 
                 
                 self.MDMListWidget.addItem(qItem)      
@@ -221,7 +221,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
 
     def mdmListClick(self):
         qItem=self.MDMListWidget.currentItem()          
-        tconfs = dict(qItem.data(1))
+        tconfs = dict(qItem.data(QtCore.Qt.ItemDataRole.UserRole))
 
         self.dataLabel.setText(str(tconfs['object_name_cn']) + ' : ' + str(tconfs['object_desc']))
         self.temFile.setText(str(tconfs['template_file']))
@@ -235,12 +235,12 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             QMessageBox.information(self,'MDM', '请先选择要打开配置文件对应的基础数据配置表')
             return
         qItem=self.MDMListWidget.currentItem()
-        cols = dict(qItem.data(1))
+        tconfs = dict(qItem.data(QtCore.Qt.ItemDataRole.UserRole))
 
-        if str(cols['template_file']) =='':
+        if str(tconfs['template_file']) =='':
             QMessageBox.information(self,'MDM', '当前基础数据表尚未配置对应的配置文件')
             return
-        appPath=os.path.join(BASE_DIR,str(cols['template_file']))
+        appPath=os.path.join(BASE_DIR,str(tconfs['template_file']))
         #subprocess.run(appPath)
         os.system('start ' + appPath)
         #os.startfile(appPath) 
@@ -255,7 +255,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             return
         
         qItem=self.MDMListWidget.currentItem()
-        tconfs = dict(qItem.data(1))        
+        tconfs = dict(qItem.data(QtCore.Qt.ItemDataRole.UserRole))        
         sheetName = str(tconfs['template_sheet'])
         if QMessageBox.question(self, 'MDM', '确认更新模板配置表[' +sheetName + ']的数据?',QMessageBox.Yes|QMessageBox.No) == QMessageBox.No:
             return
@@ -312,7 +312,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         if not fNames[0]:
             return      
         qItem=self.MDMListWidget.currentItem()
-        tconfs = dict(qItem.data(1))        
+        tconfs = dict(qItem.data(QtCore.Qt.ItemDataRole.UserRole))        
         sheetName = str(tconfs['template_sheet'])
         startRow = 2  #默认没有设置起始值，则默认从第二行开始（第一行为标题）
         if str(tconfs['start_row']).isdigit():
@@ -364,7 +364,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             return
             
         qItem=self.MDMListWidget.currentItem()
-        tconfs = dict(qItem.data(1))             
+        tconfs = dict(qItem.data(QtCore.Qt.ItemDataRole.UserRole))             
         if str(tconfs['template_file']) =='':
             QMessageBox.information(self,'MDM', '当前基础数据表尚未配置对应的配置文件')
             return
