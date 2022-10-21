@@ -1005,7 +1005,10 @@
     </font>
    </property>
    <property name="editTriggers">
-    <set>QAbstractItemView::DoubleClicked|QAbstractItemView::SelectedClicked</set>
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectRows</enum>
    </property>
    <column>
     <property name="text">
@@ -1070,6 +1073,46 @@
    <column>
     <property name="text">
      <string>三相回路数</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>载流量值</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>折算系数</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>敷设系数</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>单绕组电缆根数</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>向上取整</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>单相电缆根数</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>单绕组电流余量</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>余量百分比</string>
     </property>
    </column>
   </widget>

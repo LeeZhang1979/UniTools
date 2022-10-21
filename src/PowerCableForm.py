@@ -7,7 +7,7 @@ import os
 import sys 
 import math
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPalette, QPixmap, QIcon, QImage, QIntValidator, QDoubleValidator, QRegExpValidator
+from PyQt5.QtGui import QPalette,QPixmap, QIcon, QImage, QRegExpValidator
 from PyQt5.QtWidgets import QMainWindow,QMessageBox,QTableWidgetItem,QFileDialog
 from PyQt5.QtCore import QRegExp 
 
@@ -15,6 +15,8 @@ from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlQuery
 
 from openpyxl import Workbook 
+from openpyxl.styles import Alignment
+from openpyxl.utils import get_column_letter
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -117,6 +119,11 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.rbSpace.clicked.connect(self.refreshLayingPic)
         self.cmbLayingType.currentIndexChanged.connect(self.refreshLayingPic)
         self.btnCalculation.clicked.connect(self.btnCalculationClick)
+        self.btnAdd.clicked.connect(self.btnAddClick)
+        self.btnUpdate.clicked.connect(self.btnUpdateClick)
+        self.btnDelete.clicked.connect(self.btnDeleteClick)
+        self.btnExport.clicked.connect(self.btnExportClick)
+        self.tblList.itemDoubleClicked.connect(self.tblSelected)
     
     def initData(self): 
         self.cleanResult()        
@@ -125,7 +132,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
     
     def isNumber(self,s):
         if s.count(".")==1:  #小数的判断
-            if s[0]=="-":
+            if s[0] == "-":
                 s=s[1:]
             if s[0]==".":
                 return False
@@ -221,8 +228,10 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         #余量百分比
         self.lblOECPer.setText('')
 
-    def btnCalculationClick(self):
+    def calculation(self):
+        
         self.cleanResult()
+
         strPara = ''
         #电缆类型
         self.cmbPCType.currentText()
@@ -264,7 +273,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
                     strPara = str(query.value('single_3core_vs'))
         else:
             QMessageBox.critical(self,'动力电缆计算', query.lastError().text())  
-            return
+            return False
         if self.isNumber(strPara):
             paraY = float(strPara)        
         elif strPara == '\\':
@@ -289,7 +298,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
                     strPara = str(query.value('mineral_ic'))
         else:
             QMessageBox.critical(self,'动力电缆计算', query.lastError().text())  
-            return
+            return False
         
         if self.isNumber(strPara):
             paraA = float(strPara)
@@ -323,7 +332,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
                     strPara = str(query.value('circuits_laying3'))
         else:
             QMessageBox.critical(self,'动力电缆计算', query.lastError().text())  
-            return
+            return False
         if self.isNumber(strPara):
             paraB = float(strPara)
         elif strPara == '\\':
@@ -339,8 +348,8 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         paraD = math.ceil(paraZ)
         paraF = round(paraD * paraC,2)
         paraE = round(paraD * temp - paraA,2) 
-        paraP = round(paraE / paraX ,4)  
-
+        paraP = round(paraE / paraX ,4)
+        
         self.lblOECNum.setText(str(paraY))
         self.lblOCFnum.setText(str(paraA))
         self.lblOACF.setText(str(paraB))
@@ -349,15 +358,236 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.lblOSDNum.setText(str(paraF))
         self.lblOECLeftNum.setText(str(paraE))
         self.lblOECPer.setText(f'{round(paraP*100,2)}%')
+       
+        return True
 
-        '''
-        #列表        
-        rows=self.dataTableWidget.rowCount()
-        self.dataTableWidget.insertRow(rows)
-        qtitem=QTableWidgetItem('')
-        self.dataTableWidget.setItem(rows,1,qtitem)
-        qtitem.setData(QtCore.Qt.ItemDataRole.UserRole, '') 
-        '''
+    def btnCalculationClick(self):
+        self.calculation()
 
+    def btnAddClick(self):
+        if not self.calculation():
+            return
+      
+        #列表 
+        newRow = self.tblList.rowCount()
+        self.tblList.insertRow(newRow)
 
+        #电缆类型
+        self.tblList.setItem(newRow,0, QTableWidgetItem(self.cmbPCType.currentText()))
+        #发动机单绕组电流(A) 
+        self.tblList.setItem(newRow,1, QTableWidgetItem(self.lineEEC.text()))
+        #绕组数
+        self.tblList.setItem(newRow,2, QTableWidgetItem(self.lineEWings.text()))
+        #导体
+        self.tblList.setItem(newRow,3, QTableWidgetItem(self.cmbConductor.currentText()))
+        #标称截面积(㎜²)
+        self.tblList.setItem(newRow,4, QTableWidgetItem(self.lineECS.text()))
+        #绝缘材料 
+        self.tblList.setItem(newRow,5, QTableWidgetItem(self.cmbConductor.currentText()))
+        #环温(°C)  
+        self.tblList.setItem(newRow,6, QTableWidgetItem(self.lineEAmbientT.text()))
+        #护套耐温(°C) 
+        self.tblList.setItem(newRow,7, QTableWidgetItem(self.lineESTR.text()))  
+        #电缆芯数排列
+        self.tblList.setItem(newRow,8, QTableWidgetItem(self.cmbCrossType.currentText()))
+        #敷设方式
+        self.tblList.setItem(newRow,9, QTableWidgetItem(self.cmbLayingType.currentText()))
+        #是否接触
+        touchtype=''
+        if self.rbTouch.isChecked():
+            touchtype = self.rbTouch.text()
+        elif self.rbSpace.isChecked():
+            #有间距
+            touchtype = self.rbSpace.text()
+        self.tblList.setItem(newRow,10, QTableWidgetItem(touchtype))
+        #托盘/梯架数 
+        self.tblList.setItem(newRow,11, QTableWidgetItem(self.lineENumber.text()))
+        #三相回路数 
+        self.tblList.setItem(newRow,12, QTableWidgetItem(self.lineECircuits.text()))
+        #载流量值
+        self.tblList.setItem(newRow,13, QTableWidgetItem(self.lblOECNum.text()))
+        #折算系数
+        self.tblList.setItem(newRow,14, QTableWidgetItem(self.lblOCFnum.text()))
+        #敷设系数
+        self.tblList.setItem(newRow,15, QTableWidgetItem(self.lblOACF.text()))
+        #单绕组电缆根数
+        self.tblList.setItem(newRow,16, QTableWidgetItem(self.lblOSNum.text()))
+        #向上取整
+        self.tblList.setItem(newRow,17, QTableWidgetItem(self.lblOSNumUp.text()))  
+        #单相电缆根数
+        self.tblList.setItem(newRow,18, QTableWidgetItem(self.lblOSDNum.text()))   
+        #单绕组电流余量
+        self.tblList.setItem(newRow,19, QTableWidgetItem(self.lblOECLeftNum.text()))
+        #余量百分比
+        self.tblList.setItem(newRow,20, QTableWidgetItem(self.lblOECPer.text()))
 
+        #qtitem = QTableWidgetItem(self.cmbPCType.currentText())
+        #self.cmbPCType.setCurrentText(text)
+        #qtitem.setData(QtCore.Qt.ItemDataRole.UserRole, '') 
+
+    def btnUpdateClick(self):
+        row = self.tblList.currentRow()
+        if row<= 0:
+            QMessageBox.critical(self,'动力电缆计算', '请选择要更新的行后，再点击更新选中的行') 
+            return
+        
+        if not self.calculation():
+            return
+      
+        #电缆类型 
+        self.tblList.Item(row,0).setText(self.cmbPCType.currentText())
+        #发动机单绕组电流(A) 
+        self.tblList.item(row,1).setText(self.lineEEC.text())
+        #绕组数
+        self.tblList.item(row,2).setText(self.lineEWings.text())
+        #导体
+        self.tblList.item(row,3).setText(self.cmbConductor.currentText())
+        #标称截面积(㎜²)
+        self.tblList.item(row,4).setText(self.lineECS.text())
+        #绝缘材料 
+        self.tblList.item(row,5).setText(self.cmbConductor.currentText())
+        #环温(°C)  
+        self.tblList.item(row,6).setText(self.lineEAmbientT.text())
+        #护套耐温(°C) 
+        self.tblList.item(row,7).setText(self.lineESTR.text())
+        #电缆芯数排列
+        self.tblList.item(row,8).setText(self.cmbCrossType.currentText())
+        #敷设方式
+        self.tblList.item(row,9).setText(self.cmbLayingType.currentText())
+        #是否接触
+        touchtype=''
+        if self.rbTouch.isChecked():
+            touchtype = self.rbTouch.text()
+        elif self.rbSpace.isChecked():
+            #有间距
+            touchtype = self.rbSpace.text()
+        self.tblList.item(row,10).setText(touchtype)
+        #托盘/梯架数 
+        self.tblList.item(row,11).setText(self.lineENumber.text())
+        #三相回路数 
+        self.tblList.item(row,12).setText(self.lineECircuits.text())
+        #载流量值
+        self.tblList.item(row,13).setText(self.lblOECNum.text())
+        #折算系数
+        self.tblList.item(row,14).setText(self.lblOCFnum.text())
+        #敷设系数
+        self.tblList.item(row,15).setText(self.lblOACF.text())
+        #单绕组电缆根数
+        self.tblList.item(row,16).setText(self.lblOSNum.text())
+        #向上取整
+        self.tblList.item(row,17).setText(self.lblOSNumUp.text())
+        #单相电缆根数
+        self.tblList.item(row,18).setText(self.lblOSDNum.text())
+        #单绕组电流余量
+        self.tblList.item(row,19).setText(self.lblOECLeftNum.text())
+        #余量百分比
+        self.tblList.item(row,20).setText(self.lblOECPer.text())    
+    
+    def btnDeleteClick(self):
+        row = self.tblList.currentRow()
+        if row<= 0:
+            QMessageBox.critical(self,'动力电缆计算', '请选择要更新的行后，再点击删除选中的行') 
+            return
+        
+        if QMessageBox.critical(self,'动力电缆计算', '确认删除当前行',QMessageBox.Yes|QMessageBox.No) == QMessageBox.No:
+            return
+        self.tblList.removeRow(row)
+
+    def btnExportClick(self): 
+        if self.tblList.rowCount()<= 0:
+            QMessageBox.critical(self,'动力电缆计算', '请选择要更新的行后，再点击更新选中的行') 
+            return
+        fNames= QFileDialog.getSaveFileName(self,'生成动力电缆计算文件', '/','Excel File (*.xlsx)')
+        if not fNames[0]:
+            return
+
+        try:            
+            wb = Workbook() 
+            ws = wb.active 
+            ws.title = u'动力电缆计算'
+
+            listRow = 0  
+            while listRow < self.tblList.rowCount():
+                row = 1
+                column = listRow * 4 +1 
+                ws.column_dimensions[get_column_letter(column)].width = 5
+                ws.column_dimensions[get_column_letter(column+1)].width = 20
+                ws.column_dimensions[get_column_letter(column+2)].width = 50
+                 #电缆类型 
+                ws.merge_cells(start_row=row,start_column=column,end_row=row,end_column=column+2)
+                ws.cell(row, column).value = self.tblList.item(listRow,0).text()
+                ws.cell(row, column).alignment = Alignment(horizontal='center',vertical='center')
+                ws.merge_cells(start_row=row+1,start_column=column,end_row=row+11,end_column=column)
+                ws.cell(row+1, column).value = u'输入'                   
+                ws.cell(row+1, column).alignment = Alignment(horizontal='center',vertical='center')
+                ws.merge_cells(start_row=row+12,start_column=column,end_row=row+20,end_column=column)
+                ws.cell(row+12, column).value = u'输出'
+                ws.cell(row+12, column).alignment = Alignment(horizontal='center',vertical='center')
+                i = 1
+                while i < self.tblList.columnCount(): 
+                    ws.cell(row+i, column+1).value = self.tblList.horizontalHeaderItem(i).text() 
+                    ws.cell(row+i, column+2).value = self.tblList.item(listRow,i).text()
+                    i += 1
+
+                listRow += 1
+                
+            wb.save(fNames[0])
+            wb.close
+            QMessageBox.information(self,'MDM','导出数据完成，文件名：' + fNames[0])    
+            
+        except: 
+            QMessageBox.information(self,'MDM','导出数据文件失败，可能是文件类型错误') 
+        return
+        
+    def tblSelected(self):
+        
+        row = self.tblList.currentRow()
+        if row<= 0:
+            return
+        #电缆类型
+        self.cmbPCType.setCurrentText(self.tblList.item(row,0).text())
+        #发动机单绕组电流(A) 
+        self.lineEEC.setText(self.tblList.item(row,1).text())
+        #绕组数
+        self.lineEWings.setText(self.tblList.item(row,2).text())
+        #导体
+        self.cmbConductor.setCurrentText(self.tblList.item(row,3).text())
+        #标称截面积(㎜²)
+        self.lineECS.setText(self.tblList.item(row,4).text())
+        #绝缘材料 
+        self.cmbConductor.setCurrentText(self.tblList.item(row,5).text())
+        #环温(°C)  
+        self.lineEAmbientT.setText(self.tblList.item(row,6).text())
+        #护套耐温(°C) 
+        self.lineESTR.setText(self.tblList.item(row,7).text())
+        #电缆芯数排列
+        self.cmbCrossType.setCurrentText(self.tblList.item(row,8).text())
+        #敷设方式
+        self.cmbLayingType.setCurrentText(self.tblList.item(row,9).text())
+        #是否接触
+        if self.tblList.item(row,10).text() == self.rbTouch.text() :
+            self.rbTouch.setChecked(True)
+        elif self.tblList.item(row,10).text() == self.rbSpace.text() :
+            #有间距
+            self.rbSpace.setChecked(True) 
+        #托盘/梯架数 
+        self.lineENumber.setText(self.tblList.item(row,11).text())
+        #三相回路数 
+        self.lineECircuits.setText(self.tblList.item(row,12).text())
+        #载流量值
+        self.lblOECNum.setText(self.tblList.item(row,13).text())
+        #折算系数
+        self.lblOCFnum.setText(self.tblList.item(row,14).text())
+        #敷设系数
+        self.lblOACF.setText(self.tblList.item(row,15).text())
+        #单绕组电缆根数
+        self.lblOSNum.setText(self.tblList.item(row,16).text())
+        #向上取整
+        self.lblOSNumUp.setText(self.tblList.item(row,17).text())  
+        #单相电缆根数
+        self.lblOSDNum.setText(self.tblList.item(row,18).text())
+        #单绕组电流余量
+        self.lblOECLeftNum.setText(self.tblList.item(row,19).text())
+        #余量百分比
+        self.lblOECPer.setText(self.tblList.item(row,20).text())
+        
