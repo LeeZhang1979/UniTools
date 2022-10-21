@@ -231,19 +231,24 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.lblOECPer.setText('')
 
     def calculation(self):
-        
         self.cleanResult()
-        
         strPara = ''
         #电缆类型
         self.cmbPCType.currentText()
         #发动机单绕组电流(A)
         if self.isNumber(self.lineEEC.text()):
             paraX = float(self.lineEEC.text())
+        else:
+            QMessageBox.critical(self,'动力电缆计算', '发动机单绕组电流为空或非数字') 
+            self.lineEEC.setFocus()
+            return False
         #绕组数
         if self.isNumber(self.lineEWings.text()):
             paraC = float(self.lineEWings.text())
-
+        else:
+            QMessageBox.critical(self,'动力电缆计算', '绕组数为空或非数字') 
+            self.lineEWings.setFocus()
+            return False
         #Query ampacity Table
         #导体
         conductor = self.cmbConductor.currentText()
@@ -283,8 +288,6 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         else:
             QMessageBox.critical(self,'动力电缆计算', '根据给出的条件,未找到对应额定载流量')  
             return False
-
-
         #Query ambienttcf Table
         insulatedType = u'绝缘'
         #环温(°C)
@@ -438,15 +441,15 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
 
     def btnUpdateClick(self):
         row = self.tblList.currentRow()
-        if row<= 0:
-            QMessageBox.critical(self,'动力电缆计算', '请选择要更新的行后，再点击更新选中的行') 
+        if row< 0:
+            QMessageBox.critical(self,'动力电缆计算', '请双击要更新的行,并更新数据后，再点击更新选中的行') 
             return
         
         if not self.calculation():
             return
       
         #电缆类型 
-        self.tblList.Item(row,0).setText(self.cmbPCType.currentText())
+        self.tblList.item(row,0).setText(self.cmbPCType.currentText())
         #发动机单绕组电流(A) 
         self.tblList.item(row,1).setText(self.lineEEC.text())
         #绕组数
