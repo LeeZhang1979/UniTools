@@ -301,8 +301,14 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             wb.close()
             self.showData(str(tconfs['object_id']),str(tconfs['object_name']))
             QMessageBox.information(self,'MDM', '导入数据[' + str(tconfs['object_name_cn'])+ ']完成') 
-        except: 
-            QMessageBox.information(self,'MDM', '导入数据失败') 
+        except (NameError,ZeroDivisionError):
+            QMessageBox.critical(self, '动力电缆计算', '变量名错误或除数为0')
+        except OSError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except TypeError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except :
+            QMessageBox.information(self,'动力电缆计算','导出数据文件失败') 
           
     def exportClick(self):
         if self.MDMListWidget.count()<=0:
@@ -352,10 +358,15 @@ class MDMForm(QMainWindow,Ui_MDMForm):
                 iRow += 1            
             wb.save(fNames[0])
             wb.close
-            QMessageBox.information(self,'MDM','导出数据完成，文件名：' + fNames[0])    
-            
-        except: 
-            QMessageBox.information(self,'MDM','导出数据文件失败，可能是文件类型错误') 
+            QMessageBox.information(self,'MDM','导出数据完成，文件名：' + fNames[0])               
+        except (NameError,ZeroDivisionError):
+            QMessageBox.critical(self, '动力电缆计算', '变量名错误或除数为0')
+        except OSError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except TypeError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except :
+            QMessageBox.information(self,'动力电缆计算','导出数据文件失败')  
         return
 
     def updateClick(self):
@@ -377,8 +388,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
 
         startRow = 2  #默认没有设置起始值，则默认从第二行开始（第一行为标题）
         if str(tconfs['start_row']).isdigit():
-            startRow=int(str(tconfs['start_row']))                    
-
+            startRow=int(str(tconfs['start_row']))
         try:               
             columnMap = dict()
             column = dict()
@@ -423,7 +433,12 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             wb.save(tempfile)
             wb.close
             QMessageBox.information(self,'MDM','更新模板文件数据:' + tempfile + '完成')    
-            
-        except: 
-            QMessageBox.information(self,'MDM','更新模板文件数据失败，可能是文件类型错误') 
+        except (NameError,ZeroDivisionError):
+            QMessageBox.critical(self, '动力电缆计算', '变量名错误或除数为0')
+        except OSError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except TypeError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except :
+            QMessageBox.information(self,'动力电缆计算','导出数据文件失败') 
         return

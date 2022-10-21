@@ -36,7 +36,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.db.setDatabaseName(os.path.join(BASE_DIR,'db\\mdm.db'))
         if not self.db.isOpen():
             if not self.db.open():               
-                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                QMessageBox.critical(self, '动力电缆计算', self.db.lastError().text())
                 return
         self.initData()
 
@@ -131,10 +131,12 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.tblList.setRowCount(0)
     
     def isNumber(self,s):
+        if len(s) == 0:
+            return False
         if s.count(".")==1:  #小数的判断
             if s[0] == "-":
                 s=s[1:]
-            if s[0]==".":
+            if s[0] == ".":
                 return False
             s=s.replace(".","")
             for i in s:
@@ -231,13 +233,13 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
     def calculation(self):
         
         self.cleanResult()
-
+        
         strPara = ''
         #电缆类型
         self.cmbPCType.currentText()
         #发动机单绕组电流(A)
         if self.isNumber(self.lineEEC.text()):
-            paraX = float(self.lineEEC.text() )
+            paraX = float(self.lineEEC.text())
         #绕组数
         if self.isNumber(self.lineEWings.text()):
             paraC = float(self.lineEWings.text())
@@ -278,6 +280,10 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
             paraY = float(strPara)        
         elif strPara == '\\':
             paraY = 1.0
+        else:
+            QMessageBox.critical(self,'动力电缆计算', '根据给出的条件,未找到对应额定载流量')  
+            return False
+
 
         #Query ambienttcf Table
         insulatedType = u'绝缘'
@@ -304,6 +310,9 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
             paraA = float(strPara)
         elif strPara == '\\':
             paraA = 1.0
+        else:
+            QMessageBox.critical(self,'动力电缆计算', '根据给出的条件,未找到对应折算系数')  
+            return False
         #Query layingcf Table
         #敷设方式
         layingtype = self.cmbLayingType.currentText()
@@ -337,7 +346,10 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
             paraB = float(strPara)
         elif strPara == '\\':
             paraB = 1.0
-         
+        else:
+            QMessageBox.critical(self,'动力电缆计算', '根据给出的条件,未找到对应敷设系数')  
+            return False 
+
         temp = float(1.0)
         temp *= paraY 
         temp *= paraA
@@ -367,7 +379,6 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
     def btnAddClick(self):
         if not self.calculation():
             return
-      
         #列表 
         newRow = self.tblList.rowCount()
         self.tblList.insertRow(newRow)
@@ -495,17 +506,15 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
 
     def btnExportClick(self): 
         if self.tblList.rowCount()<= 0:
-            QMessageBox.critical(self,'动力电缆计算', '请选择要更新的行后，再点击更新选中的行') 
+            QMessageBox.critical(self,'动力电缆计算', '请先添加需要导出的信息') 
             return
         fNames= QFileDialog.getSaveFileName(self,'生成动力电缆计算文件', '/','Excel File (*.xlsx)')
         if not fNames[0]:
             return
-
         try:            
             wb = Workbook() 
             ws = wb.active 
             ws.title = u'动力电缆计算'
-
             listRow = 0  
             while listRow < self.tblList.rowCount():
                 row = 1
@@ -528,15 +537,18 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
                     ws.cell(row+i, column+1).value = self.tblList.horizontalHeaderItem(i).text() 
                     ws.cell(row+i, column+2).value = self.tblList.item(listRow,i).text()
                     i += 1
-
                 listRow += 1
-                
             wb.save(fNames[0])
             wb.close
-            QMessageBox.information(self,'MDM','导出数据完成，文件名：' + fNames[0])    
-            
-        except: 
-            QMessageBox.information(self,'MDM','导出数据文件失败，可能是文件类型错误') 
+            QMessageBox.information(self,'动力电缆计算','导出数据完成，文件名：' + fNames[0])    
+        except (NameError,ZeroDivisionError):
+            QMessageBox.critical(self, '动力电缆计算', '变量名错误或除数为0')
+        except OSError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except TypeError as reason:
+            QMessageBox.critical(self, '动力电缆计算', str(reason))
+        except :
+            QMessageBox.information(self,'动力电缆计算','导出数据文件失败') 
         return
         
     def tblSelected(self):
