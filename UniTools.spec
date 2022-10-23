@@ -8,9 +8,11 @@ py_files = [
     'ui\\__init__.py',
     'ui\\Ui_MainWindow.py',
     'ui\\Ui_MDMForm.py',
+    'ui\\Ui_PowerCableForm.py',
     'src\\__init__.py',
     'src\\MainWindow.py',
     'src\\MDMForm.py',
+    'src\\PowerCableForm.py',
     'src\\__init__.py',
     'conf\\AppConfigure.py' 
 ]
@@ -19,7 +21,7 @@ data_files = [
     ('conf\\AppConfigs.xml','conf\\'),
     ('conf\\App.ini','conf\\'),
     ('res\\imgs\\*','res\\imgs\\'),
-    ('db\\*.db','db\\'),
+    ('db\\mdm.db','db\\'),
     ('docs\\*','docs\\')
 ]
 a = Analysis(py_files,
