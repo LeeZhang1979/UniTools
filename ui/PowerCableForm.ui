@@ -136,7 +136,7 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>131</width>
+     <width>101</width>
      <height>20</height>
     </rect>
    </property>
@@ -147,7 +147,7 @@
     </font>
    </property>
    <property name="text">
-    <string>发动机单绕组电流(A)</string>
+    <string>单绕组电流(A)</string>
    </property>
    <property name="buddy">
     <cstring>lineEEC</cstring>
@@ -156,9 +156,9 @@
   <widget class="QLineEdit" name="lineEEC">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>100</x>
      <y>40</y>
-     <width>71</width>
+     <width>91</width>
      <height>20</height>
     </rect>
    </property>
@@ -305,12 +305,12 @@
    </property>
    <item>
     <property name="text">
-     <string>XLPE/EPR</string>
+     <string>PVC</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>PVC</string>
+     <string>XLPE/EPR</string>
     </property>
    </item>
    <item>
@@ -1317,7 +1317,7 @@
     </font>
    </property>
    <property name="text">
-    <string>折算系数</string>
+    <string>温度折算系数</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

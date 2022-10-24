@@ -275,7 +275,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
                 elif self.cmbCrossType.currentIndex() == 4:
                     strPara = str(query.value('signle_3core_ft'))
                 elif self.cmbCrossType.currentIndex() == 5:
-                    strPara = str(query.value('single_3core_hs'))
+                    strPara = str(query.value('single_3core_hs')) 
                 elif self.cmbCrossType.currentIndex() == 6:
                     strPara = str(query.value('single_3core_vs'))
         else:
@@ -292,10 +292,13 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         insulatedType = u'绝缘'
         #环温(°C)
         ambientt = self.lineEAmbientT.text()
-
         strPara = ''
         paraA = float(0.0)
-        if query.exec(self.__ambienttcfSQL(insulatedType,ambientt)):
+        if self.cmbCrossType.currentIndex() == 5:
+            strPara = '1.0'  #硬性指定为1.0
+        elif self.cmbCrossType.currentIndex() == 6:
+            strPara = '1.0'  #硬性指定为1.0
+        elif query.exec(self.__ambienttcfSQL(insulatedType,ambientt)):
             while query.next():
                 if self.cmbMaterial.currentIndex() == 0:
                     strPara = str(query.value('pvc'))
@@ -312,7 +315,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         if self.isNumber(strPara):
             paraA = float(strPara)
         elif strPara == '\\':
-            paraA = 1.0
+            paraA = float(1.0)
         else:
             QMessageBox.critical(self,'动力电缆计算', '根据给出的条件,未找到对应折算系数')  
             return False
@@ -362,8 +365,8 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         #向上取整
         paraD = math.ceil(paraZ)
         paraF = round(paraD * paraC,2)
-        paraE = round(paraD * temp - paraA,2) 
-        paraP = round(paraE / paraX ,4)
+        paraE = round(paraY * paraD - paraX,2) 
+        paraP = round(paraE / paraX,4)
         
         self.lblOECNum.setText(str(paraY))
         self.lblOCFnum.setText(str(paraA))
