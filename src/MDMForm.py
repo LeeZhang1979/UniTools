@@ -77,6 +77,10 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             dict: 回指定表的列及对应excel内汉字名称字典
         """        
         cols = dict()
+        if not self.db.isOpen():
+            if not self.db.open():               
+                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                return
         query = QSqlQuery()                
         if not query.exec(self.__columnsql(str(id))):
             QMessageBox.critical(self,'MDM', query.lastError().text()) 
@@ -95,6 +99,10 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             dict:  回指定表的列及对应excel内对应excel的列
         """        
         cols = dict()
+        if not self.db.isOpen():
+            if not self.db.open():               
+                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                return
         query = QSqlQuery()                
         if not query.exec(self.__columnsql(str(id))):
             QMessageBox.critical(self,'MDM', query.lastError().text()) 
@@ -138,10 +146,6 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         self.addConnect()
         self.db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName(os.path.join(BASE_DIR,'db\\mdm.db'))
-        if not self.db.isOpen():
-            if not self.db.open():               
-                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
-                return
         self.initData()     
         if self.MDMListWidget.count()>0:
             self.MDMListWidget.setCurrentItem(self.MDMListWidget.item(0))
@@ -167,6 +171,10 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         
     def initData(self): 
         self.MDMListWidget.clear()
+        if not self.db.isOpen():
+            if not self.db.open():               
+                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                return
         query = QSqlQuery()
         if query.exec(self.__tablesql()):
             while query.next():       
@@ -207,7 +215,11 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             sql += str(col)
         sql = 'select ' + sql
         sql +=' from '
-        sql += str(name)        
+        sql += str(name)
+        if not self.db.isOpen():
+            if not self.db.open():               
+                QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                return        
         query = QSqlQuery()
         if not query.exec(sql):
             QMessageBox.critical(self,'MDM', query.lastError().text())
@@ -270,7 +282,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
         columnMap = self.__columnmap(str(tconfs['object_id']))
         
         try:  
-            wb= load_workbook(fNames[0],True)                         
+            wb= load_workbook(filename=fNames[0],read_only=True,data_only=True)                         
             if not (wb.sheetnames.index(sheetName) >= 0):
                 QMessageBox.warning(self,'MDM', '选择的文件:' + fNames[0] + ',未包含配置指定的Sheet[' +sheetName + ']')
                 wb.close()
@@ -280,7 +292,11 @@ class MDMForm(QMainWindow,Ui_MDMForm):
 
             if endRow == 0:
                 endRow = ws.max_row   # type: ignore  
-            sql = 'delete from ' + str(tconfs['object_name'])                 
+            sql = 'delete from ' + str(tconfs['object_name'])       
+            if not self.db.isOpen():
+                if not self.db.open():               
+                    QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                    return          
             query = QSqlQuery()
             if not query.exec_(sql):
                 QMessageBox.warning(self,'MDM', '清空数据表[' + str(tconfs['object_name_cn'] + ':' + query.lastQuery() + ']失败' + query.lastError().text()))
@@ -288,16 +304,26 @@ class MDMForm(QMainWindow,Ui_MDMForm):
                 return 
             sql = self.__insertsql(columnMap,str(tconfs['object_name']) )            
             query.prepare(sql)
-            for iRow in (range(startRow,endRow+1)):   
+            for iRow in (range(startRow,endRow+1)): 
+                bAllEmptyflag = True  
                 for k,v in columnMap.items():
                     if len(str(v))<=0:
                         continue
-                    query.addBindValue(str(ws[str(v)+str(iRow)].value)) # type: ignore
-                    
-                if not query.exec():
-                    QMessageBox.warning(self,'MDM', '执行语句[' + query.lastQuery() + ']失败,' + query.lastError().text())
-                    wb.close()
-                    return             
+                    if ws[str(v)+str(iRow)].value is None:
+                        qvalue =''
+                    else:
+                        qvalue = str(ws[str(v)+str(iRow)].value)# type: ignore
+
+                    if not(len(qvalue)==0 or qvalue.isspace()):
+                        bAllEmptyflag = False 
+                    query.addBindValue(qvalue) 
+
+                if bAllEmptyflag:  
+                    continue
+                elif not query.exec():
+                        QMessageBox.warning(self,'MDM', '执行语句[' + query.lastQuery() + ']失败,' + query.lastError().text())
+                        wb.close()
+                        return             
             wb.close()
             self.showData(str(tconfs['object_id']),str(tconfs['object_name']))
             QMessageBox.information(self,'MDM', '导入数据[' + str(tconfs['object_name_cn'])+ ']完成') 
@@ -345,6 +371,10 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             sql = 'select ' + sql
             sql +=' from '
             sql += str(tconfs['object_name'])
+            if not self.db.isOpen():
+                if not self.db.open():               
+                    QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                    return
             query = QSqlQuery()
             if not query.exec(sql):
                 QMessageBox.critical(self,'MDM', query.lastError().text())
@@ -419,6 +449,10 @@ class MDMForm(QMainWindow,Ui_MDMForm):
             sql = 'select ' + sql
             sql +=' from '
             sql += str(tconfs['object_name'])
+            if not self.db.isOpen():
+                if not self.db.open():               
+                    QMessageBox.critical(self, 'MDM', self.db.lastError().text())
+                    return
             query = QSqlQuery()
             if not query.exec(sql):
                 QMessageBox.critical(self,'MDM', query.lastError().text())

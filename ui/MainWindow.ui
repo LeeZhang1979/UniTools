@@ -94,6 +94,7 @@
      <string>通用工具</string>
     </property>
     <addaction name="actionPowerCableCal"/>
+    <addaction name="actionWireConvert"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuTool"/>
@@ -112,6 +113,11 @@
   <action name="actionPowerCableCal">
    <property name="text">
     <string>动力电缆计算</string>
+   </property>
+  </action>
+  <action name="actionWireConvert">
+   <property name="text">
+    <string>线束表转换</string>
    </property>
   </action>
  </widget>

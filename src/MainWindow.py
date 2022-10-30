@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
 from PyQt5.QtGui import QPalette, QBrush, QPixmap, QIcon
 from src.MDMForm import MDMForm 
 from src.PowerCableForm import PowerCableForm
+from src.WireConvertForm import WireConvertForm
 BASE_DIR= os.path.dirname(os.path.dirname(os.path.abspath(__file__) ) )
 sys.path.append( BASE_DIR  )   
 from ui.Ui_MainWindow import Ui_MainWindow 
@@ -47,6 +48,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.btnMDMConf.clicked.connect(self.menuConfigure)
         self.actionConfigure.triggered.connect(self.menuConfigure)
         self.actionPowerCableCal.triggered.connect(self.menuPowerCableCal)
+        self.actionWireConvert.triggered.connect(self.menuWireConvert)
 
     def tool01Click(self):
 
@@ -63,3 +65,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def menuPowerCableCal(self):
         self.pcWin = PowerCableForm()       
         self.pcWin.show()
+    
+    def menuWireConvert(self):
+        self.wcForm = WireConvertForm()
+        self.wcForm.show()

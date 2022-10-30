@@ -103,7 +103,7 @@
     <string>300</string>
    </property>
    <property name="maxLength">
-    <number>8</number>
+    <number>5</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -367,9 +367,6 @@
    <property name="text">
     <string>90</string>
    </property>
-   <property name="maxLength">
-    <number>4</number>
-   </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
@@ -567,9 +564,6 @@
    </property>
    <property name="text">
     <string>30</string>
-   </property>
-   <property name="maxLength">
-    <number>4</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1475,7 +1469,7 @@
     <string>1.00</string>
    </property>
    <property name="maxLength">
-    <number>8</number>
+    <number>5</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1525,7 +1519,7 @@
     <string>10.00</string>
    </property>
    <property name="maxLength">
-    <number>8</number>
+    <number>5</number>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1624,10 +1618,12 @@
     <font>
      <family>Microsoft YaHei UI</family>
      <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>当前最低成本</string>
+    <string>最低成本第1行:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

@@ -31,21 +31,16 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         super().__init__()
         self.setupUi(self)
         self.setupUiEx()
-        self.addConnect()
+        self.addConnect()         
+        
         self.db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName(os.path.join(BASE_DIR,'db\\mdm.db'))
-        if not self.db.isOpen():
-            if not self.db.open():               
-                QMessageBox.critical(self, '动力电缆计算', self.db.lastError().text())
-                return
+
         self.initData()
 
     def closeEvent(self, QCloseEvent):   
         if self.db.isOpen:
             self.db.close()            
-    
-    def closeEvent(self, QCloseEvent):
-        return 
 
     def setupUiEx(self):
         icon = QIcon()
@@ -282,6 +277,10 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         #电缆芯数及排列
         #self.cmbCrossType.currentText()
         paraY = float(1.0)
+        if not self.db.isOpen():
+            if not self.db.open():               
+                QMessageBox.critical(self, '动力电缆计算', self.db.lastError().text())
+                return
         query = QSqlQuery()
         if query.exec(self.__ampacitySQL(conductor,material,sheathtr,crosssection)):
             while query.next():
