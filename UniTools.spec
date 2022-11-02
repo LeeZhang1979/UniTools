@@ -9,10 +9,12 @@ py_files = [
     'ui\\Ui_MainWindow.py',
     'ui\\Ui_MDMForm.py',
     'ui\\Ui_PowerCableForm.py',
+    'ui\\Ui_WireConvertForm.py',
     'src\\__init__.py',
     'src\\MainWindow.py',
     'src\\MDMForm.py',
     'src\\PowerCableForm.py',
+    'src\\WireConvertForm.py',
     'src\\__init__.py',
     'conf\\AppConfigure.py' 
 ]
