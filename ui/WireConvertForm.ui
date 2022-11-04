@@ -105,14 +105,17 @@
   <widget class="QSpinBox" name="spbStart">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>50</y>
-     <width>41</width>
+     <x>120</x>
+     <y>40</y>
+     <width>51</width>
      <height>22</height>
     </rect>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="maximum">
+    <number>9999</number>
    </property>
    <property name="value">
     <number>2</number>
@@ -121,8 +124,8 @@
   <widget class="QLabel" name="label02">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>50</y>
+     <x>60</x>
+     <y>40</y>
      <width>61</width>
      <height>22</height>
     </rect>
@@ -137,8 +140,8 @@
   <widget class="QLabel" name="label03">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>50</y>
+     <x>170</x>
+     <y>40</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -153,14 +156,23 @@
   <widget class="QSpinBox" name="spbEnd">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>50</y>
-     <width>41</width>
+     <x>260</x>
+     <y>40</y>
+     <width>51</width>
      <height>22</height>
     </rect>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="minimum">
+    <number>0</number>
+   </property>
+   <property name="maximum">
+    <number>9999</number>
+   </property>
+   <property name="value">
+    <number>0</number>
    </property>
   </widget>
   <widget class="QPushButton" name="btnPause">
@@ -180,7 +192,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>90</y>
+     <y>70</y>
      <width>61</width>
      <height>20</height>
     </rect>
@@ -196,7 +208,7 @@
    <property name="geometry">
     <rect>
      <x>79</x>
-     <y>90</y>
+     <y>70</y>
      <width>201</width>
      <height>20</height>
     </rect>
@@ -209,7 +221,7 @@
    <property name="geometry">
     <rect>
      <x>280</x>
-     <y>90</y>
+     <y>70</y>
      <width>30</width>
      <height>20</height>
     </rect>
@@ -221,8 +233,8 @@
   <widget class="QComboBox" name="cmbType">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>50</y>
+     <x>10</x>
+     <y>40</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -237,6 +249,22 @@
      <string>海</string>
     </property>
    </item>
+  </widget>
+  <widget class="QProgressBar" name="progressBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>100</y>
+     <width>311</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>0</number>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
   </widget>
  </widget>
  <tabstops>

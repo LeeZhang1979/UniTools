@@ -8,6 +8,7 @@ import os
 from pyexpat.errors import XML_ERROR_BAD_CHAR_REF 
 import sys 
 import math
+import datetime
 from turtle import bgcolor
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPalette,QPixmap, QIcon
@@ -17,7 +18,7 @@ from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlQuery
 
 from openpyxl import load_workbook,Workbook 
-from openpyxl.styles import Alignment,PatternFill,Color,Border,Font
+from openpyxl.styles import Alignment,PatternFill,Color,Border,Font,NamedStyle,Side,borders
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import FormulaRule
@@ -119,11 +120,21 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
         #self.lineEOFile.setText('C:\\Users\\lezha\\Desktop\\TEST.xlsx')
         #开发测试用，发布时需要删除
 
+        if len(self.lineEIFile.text())<=0 :
+            QMessageBox.critical(self,'线束表转化', '输入文件为空') 
+            self.lineEIFile.setFocus()
+            return
+        if len(self.lineEOFile.text())<=0:
+            QMessageBox.critical(self,'线束表转化', '输入与输出文件不能为同一文件') 
+            self.lineEOFile.setFocus()
+            return
         if self.lineEIFile.text() == self.lineEOFile.text() :
             QMessageBox.critical(self,'线束表转化', '输入与输出文件不能为同一文件') 
             self.lineEOFile.setFocus()
             return
-        self.convert()
+                
+
+        self.convert(self.lineEIFile.text(),self.lineEOFile.text())
 
     def __getCoresFromProperty(self,s):
         if len(s) == 0:
@@ -173,17 +184,18 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                     return False
             return True
         else:
-            return False
+            return False 
 
-    def convert(self):
+    def convert(self,originalFile,targetFile):
          
-        wib = load_workbook(filename=self.lineEIFile.text(),read_only=True,data_only=True) 
+        wib = load_workbook(filename=originalFile,read_only=True,data_only=True) 
         wb = Workbook()    
-         
-        try:                                 
+        startTime = datetime.datetime.now() 
+        try:  
+                                           
             sheetname=u'线束表转化'
             if not (wib.sheetnames.index(sheetname) >= 0):
-                QMessageBox.warning(self,'线束表转化', '选择的文件:' + self.lineEIFile.text() + ',未包含配置指定的Sheet[' +sheetname + ']')
+                QMessageBox.warning(self,'线束表转化', '选择的文件:' + originalFile + ',未包含配置指定的Sheet[' +sheetname + ']')
                 wib.close()
                 return                    
             wis=wib[sheetname]    
@@ -197,7 +209,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 iEndRow = wis.max_row
 
             if iStarRow > iEndRow:
-                QMessageBox.warning(self,'线束表转化', '选择的文件:' + self.lineEIFile.text() + '及配置无需要转换的数据')
+                QMessageBox.warning(self,'线束表转化', '选择的文件:' + originalFile + '及配置无需要转换的数据')
                 wib.close()
                 return     
             if not self.db.isOpen():
@@ -330,10 +342,14 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
             yellow=PatternFill(fill_type='solid',bgColor='f5ff00') 
             fontwhite= Font(name=u'等线',size=9,color='ffffff')
             fontblack=Font(name=u'等线',size=9,color='0a0a0d') 
+
             strCabledt = ''
             iCount = 0
             iYLQDDV = 1
-            for iRow in range(iStarRow,iEndRow+1):    
+            self.progressBar.setMinimum(iStarRow)
+            self.progressBar.setMaximum(iEndRow)
+            for iRow in range(iStarRow,iEndRow+1):
+                self.progressBar.setValue(iRow)
                 if strCabledt == str(wis['A' + str(iRow)].value):   #电缆号
                     continue
                 iCount += 1
@@ -360,7 +376,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                   
                 oCurRow = (iCount - 1) * 14 + 1          # 第一行  电缆组件
                 ws.cell(oCurRow,1).value = '1'               #级别号
-                #ws.cell(oCurRow,2).value = ''               #第二列、无物料号
+                #ws.cell(oCurRow,2).value = ''               #第二列、物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
                 ws.cell(oCurRow,4).value = u'电缆组件_' + strCabledt + '_' + strStarDevFun  #第四列
                 ws.cell(oCurRow,5).value = '1'               #第五列 
@@ -370,73 +386,40 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 oCurRow += 1         
                 oDupRow = oCurRow + 12                       # 第二行 and 第十四行   绝缘端子
                 ws.cell(oCurRow,1).value = '2'               #级别号
-                ws.cell(oDupRow,1).value = '2'                               
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$C$' + str(iGXStart) +':$C$' + str(iGXEnd) + '),2,FALSE)'               #第二列、无物料号
-                ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$C$' + str(iGXStart) +':$C$' + str(iGXEnd) + '),2,FALSE)'               #第二列、无物料号
-                #ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
-                #ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
-                ws.cell(oDupRow,3).value = 'L'               #第三列 
                 dvGX.add(ws.cell(oCurRow,4))
-                dvGX.add(ws.cell(oDupRow,4))
-                #ws.cell(oCurRow,4).value =  ''  #第四列
-                #ws.cell(oDupRow,4).value =  ''  #第四列
                 strTemp = self.__getCoresFromProperty(strProperty)
-                ws.cell(oCurRow,5).value = strTemp               #第五列 
-                ws.cell(oDupRow,5).value = strTemp              #第五列 
+                ws.cell(oCurRow,5).value = strTemp               #第五列  
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$E$' + str(iGXStart) +':$E$' + str(iGXEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$E$' + str(iGXStart) +':$E$' + str(iGXEnd) + '),2,FALSE)'               #第六列 
-                #ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
-                #ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
-                ws.cell(oCurRow,7).value = ''                #第七列 
-                ws.cell(oDupRow,7).value = ''                #第七列 
+                ws.cell(oCurRow,7).value = ''                #第七列  
+                for icolumn in range(1,8):
+                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
                  
                 oCurRow += 1                                # 第三行 and 第十三行   热缩管
                 oDupRow = oCurRow + 10
                 ws.cell(oCurRow,1).value = '2'               #级别号
-                ws.cell(oDupRow,1).value = '2'               #级别号
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$C$' + str(iYSGStart) +':$C$' + str(iYSGEnd) + '),2,FALSE)'               #第二列、无物料号
-                ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$C$' + str(iYSGStart) +':$C$' + str(iYSGEnd) + '),2,FALSE)'               #第二列、无物料号
-                #ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
-                #ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
-                ws.cell(oDupRow,3).value = 'L'               #第三列 
                 dvYSG.add(ws.cell(oCurRow,4))
-                dvYSG.add(ws.cell(oDupRow,4))
-                #ws.cell(oCurRow,4).value =  ''  #第四列
-                #ws.cell(oDupRow,4).value =  ''  #第四列
                 ws.cell(oCurRow,5).value = strLength               #第五列 
-                ws.cell(oDupRow,5).value = strLength               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$E$' + str(iYSGStart) +':$E$' + str(iYSGEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$E$' + str(iYSGStart) +':$E$' + str(iYSGEnd) + '),2,FALSE)'               #第六列 
-                #ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
-                #ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
                 ws.cell(oCurRow,7).value = ''                #第七列 
-                ws.cell(oDupRow,7).value = ''                #第七列 
-
-
+                for icolumn in range(1,8):
+                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
+                
                 oCurRow += 1                            # 第四行 and 第十行  线标 标签 
                 oDupRow = oCurRow + 6
                 ws.cell(oCurRow,1).value = '2'               #级别号
-                ws.cell(oDupRow,1).value = '2'               #级别号
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$C$' + str(iXBStart) +':$C$' + str(iXBEnd) + '),2,FALSE)'               #第二列、无物料号
-                ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$C$' + str(iXBStart) +':$C$' + str(iXBEnd) + '),2,FALSE)'               #第二列、无物料号
-                #ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
-                #ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
-                ws.cell(oDupRow,3).value = 'L'               #第三列 
                 dvXB.add(ws.cell(oCurRow,4))
-                dvXB.add(ws.cell(oDupRow,4))
                 ws.cell(oCurRow,4).value =  ''  #第四列
-                ws.cell(oDupRow,4).value =  ''  #第四列
                 ws.cell(oCurRow,5).value = '1'               #第五列 
-                ws.cell(oDupRow,5).value = '1'               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$E$' + str(iXBStart) +':$E$' + str(iXBEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$E$' + str(iXBStart) +':$E$' + str(iXBEnd) + '),2,FALSE)'               #第六列 
-                #ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
-                #ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
                 ws.cell(oCurRow,7).value = ''                #第七列 
-                ws.cell(oDupRow,7).value = ''                #第七列 
+                for icolumn in range(1,8):
+                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
                 
                 #第五、六， 十一，十二 为标签
                 oCurRow += 1                            # 第五、六， 十一，十二 为标签
@@ -455,7 +438,8 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.conditional_formatting.add('$D$' + str(oCurRow),rule4)
 
                 ws.merge_cells(start_row=oDupRow,start_column=4,end_row=oDupRow+1,end_column=4)
-                ws.cell(oDupRow, 4).value = strCabledt + '\n' + self.__getRCode(strStarDevName) + '\n' + strStarDevFun  #第四列   
+                ws.cell(oDupRow, 4).value = '=D' + str(oCurRow) 
+                #ws.cell(oDupRow, 4).value = strCabledt + '\n' + self.__getRCode(strStarDevName) + '\n' + strStarDevFun  #第四列   
                 ws.cell(oDupRow, 4).alignment = Alignment(horizontal='center',vertical='center',wrapText=True)
                 rule1  = FormulaRule(formula=['$B' + str(oDupRow -1) +'="DFB00052144"'],fill=black,stopIfTrue=True,font=fontwhite)
                 rule2  = FormulaRule(formula=['$B' + str(oDupRow -1) +'="DFB00052145"'],fill=white,stopIfTrue=True,font=fontblack)
@@ -465,34 +449,23 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.conditional_formatting.add('$D$' + str(oDupRow),rule2)
                 ws.conditional_formatting.add('$D$' + str(oDupRow),rule3)
                 ws.conditional_formatting.add('$D$' + str(oDupRow),rule4)
-
+                
                 oCurRow += 2                            # #第七，第九  扎带 
                 oDupRow = oCurRow + 2
                 ws.cell(oCurRow,1).value = '2'               #级别号
-                ws.cell(oDupRow,1).value = '2'               #级别号
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iZDStart) +':$D$' + str(iZDEnd) +',线束辅料!$C$' + str(iZDStart) +':$C$' + str(iZDEnd) + '),2,FALSE)'               #第二列、无物料号
-                ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iZDStart) +':$D$' + str(iZDEnd) +',线束辅料!$C$' + str(iZDStart) +':$C$' + str(iZDEnd) + '),2,FALSE)'               #第二列、无物料号
-                #ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
-                #ws.cell(oDupRow,2).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$C:$C),2,FALSE)'               #第二列、物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
-                ws.cell(oDupRow,3).value = 'L'               #第三列 
                 dvZD.add(ws.cell(oCurRow,4))
-                dvZD.add(ws.cell(oDupRow,4)) 
                 ws.cell(oCurRow,4).value = u'扎带L188φ48H1.3D4.8'       #第四列
-                ws.cell(oDupRow,4).value= u'扎带L188φ48H1.3D4.8'        #第四列      
                 strTemp = self.__rTrimUnit(strLength)        
                 if self.isNumber(strTemp): 
                     if float(strTemp) <= 25.0:     
                         ws.cell(oCurRow,4).value =  u'电缆扎带 Cable tie 2.5×100 MM'
-                        ws.cell(oDupRow,4).value =  u'电缆扎带 Cable tie 2.5×100 MM'  #第四列 
                 ws.cell(oCurRow,5).value = '1'               #第五列 
-                ws.cell(oDupRow,5).value = '1'               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iZDStart) +':$D$' + str(iZDEnd) +',线束辅料!$E$' + str(iZDStart) +':$E$' + str(iZDEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D$' + str(iZDStart) +':$D$' + str(iZDEnd) +',线束辅料!$E$' + str(iZDStart) +':$E$' + str(iZDEnd) + '),2,FALSE)'               #第六列 
-                #ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
-                #ws.cell(oDupRow,6).value = '=VLOOKUP(D' + str(oDupRow) +',IF({1,0},线束辅料!$D:$D,线束辅料!$E:$E),2,FALSE)'               #单位
                 ws.cell(oCurRow,7).value = ''                #第七列 
-                ws.cell(oDupRow,7).value = ''                #第七列  
+                for icolumn in range(1,8):
+                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
                 
                 oCurRow += 1            #第八行
                 ws.cell(oCurRow,1).value = '2'               #级别号
@@ -504,38 +477,41 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.cell(oCurRow,6).value = 'M'               #第六列 
                 ws.cell(oCurRow,7).value = strLength                #第七列 
 
-                sql = self.__oricablelistSql(strType)
-                sql += ' and spec like \'' + self.__rTrimUnit(strProperty) + '%\''                
-                if not query.exec(sql):
-                    QMessageBox.critical(self,'线束表转化', query.lastError().text())
-                    wib.close
-                    wb.close
-                    return
-                iTemp = 0 
-                strFormula=''
-                while query.next():   
-                    if len(strFormula) > 0:
-                        strFormula +=','
-                    else:
-                        ws.cell(oCurRow,2).value = str(query.value('itemno'))
-                    strFormula += '\'' 
-                    strFormula += str(query.value('itemno'))
+                if len(strProperty)>0:
+                    sql = self.__oricablelistSql(strType)
+                    sql += ' and spec like \'' + self.__rTrimUnit(strProperty) + '%\''                
+                    if not query.exec(sql):
+                        QMessageBox.critical(self,'线束表转化', query.lastError().text())
+                        wib.close
+                        wb.close
+                        return
+                    iTemp = 0 
+                    strFormula=''
+                    while query.next():   
+                        if len(strFormula) > 0:
+                            strFormula +=','
+                        else:
+                            ws.cell(oCurRow,2).value = str(query.value('itemno'))
+                        strFormula += '\'' 
+                        strFormula += str(query.value('itemno'))
 
-                if strFormula.find(',')>0:
-                    strFormula = '"' + strFormula + '"'
-                    dvYL = DataValidation(type='list',formula1=strFormula,allowBlank=True,prompt=u'原缆清单')
-                    dvYL.add(ws.cell(oCurRow,2))
-                    ws.add_data_validation(dvYL)
-                
+                    if strFormula.find(',')>0:
+                        strFormula = '"' + strFormula + '"'
+                        dvYL = DataValidation(type='list',formula1=strFormula,allowBlank=True,prompt=u'原缆清单')
+                        dvYL.add(ws.cell(oCurRow,2))
+                        ws.add_data_validation(dvYL)
+
             ws.add_data_validation(dvGX)
             ws.add_data_validation(dvYSG)
             ws.add_data_validation(dvXB)
             ws.add_data_validation(dvZD)
 
-            wb.save(self.lineEOFile.text())
+            wb.save(targetFile)
             wb.close
             wib.close
-            QMessageBox.information(self,'线束表转化','导出数据完成，文件名：' + self.lineEOFile.text())    
+            
+            endTime = datetime.datetime.now() 
+            QMessageBox.information(self,'线束表转化','导出数据完成，文件名：' + targetFile +',总耗时：' + str(endTime-startTime))    
         except (NameError,ZeroDivisionError):
             wib.close
             wb.close
