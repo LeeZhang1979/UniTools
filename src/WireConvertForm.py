@@ -205,7 +205,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
             if iStarRow > iEndRow:
                 QMessageBox.warning(self,'线束表转化', '选择的文件:' + originalFile + '及配置无需要转换的数据')
                 wib.close()
-                return     
+                return   
             if not self.db.isOpen():
                 if not self.db.open():               
                     QMessageBox.critical(self, '线束表转化', self.db.lastError().text())
