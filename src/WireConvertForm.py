@@ -196,7 +196,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
          
             iStarRow = self.spbStart.value()
             if iStarRow < 1:
-                iStarRow = 1
+                iStarRow = 1  
              
             iEndRow = self.spbEnd.value()             
             if iEndRow ==0 or wis.max_row < iEndRow:
