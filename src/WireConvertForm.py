@@ -191,14 +191,8 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
         wib = load_workbook(filename=originalFile,read_only=True,data_only=True) 
         wb = Workbook()    
         startTime = datetime.datetime.now() 
-        try:  
-                                           
-            sheetname=u'线束表转化'
-            if not (wib.sheetnames.index(sheetname) >= 0):
-                QMessageBox.warning(self,'线束表转化', '选择的文件:' + originalFile + ',未包含配置指定的Sheet[' +sheetname + ']')
-                wib.close()
-                return                    
-            wis=wib[sheetname]    
+        try:                                              
+            wis=wib.active    
          
             iStarRow = self.spbStart.value()
             if iStarRow < 1:
