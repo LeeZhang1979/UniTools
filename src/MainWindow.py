@@ -31,7 +31,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         palette.setBrush(QPalette.Background, QBrush(QPixmap(appPath)))        
         self.setPalette(palette)
         icon = QIcon()
-        appPath=os.path.join(BASE_DIR,u'res\\imgs\\UniTools.ico')
+        appPath=os.path.join(BASE_DIR,u'res\\icon\\UniTools.ico')
         icon.addPixmap(QPixmap(appPath))
         self.setWindowIcon(icon)
         self.btnTool01.setStyleSheet('QPushButton{ background:orange;color:white; \

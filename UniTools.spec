@@ -23,6 +23,7 @@ data_files = [
     ('conf\\AppConfigs.xml','conf\\'),
     ('conf\\App.ini','conf\\'),
     ('res\\imgs\\*','res\\imgs\\'),
+    ('res\\icon\\*','res\\icon\\'),
     ('db\\mdm.db','db\\'),
     ('docs\\*','docs\\')
 ]
@@ -56,7 +57,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='res\\imgs\\UniTools.ico'
+    icon='res\\icon\\UniTools.ico'
 )
 coll = COLLECT(
     exe,

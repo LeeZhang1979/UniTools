@@ -158,7 +158,7 @@ class MDMForm(QMainWindow,Ui_MDMForm):
     def setupUiEx(self):
         palette = QPalette()
         icon = QIcon()
-        appPath=os.path.join(BASE_DIR,u'res\\imgs\\mdmconf.ico')
+        appPath=os.path.join(BASE_DIR,u'res\\icon\\mdmconf.ico')
         icon.addPixmap(QPixmap(appPath))
         self.setWindowIcon(icon)
 

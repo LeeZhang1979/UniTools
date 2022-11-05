@@ -44,7 +44,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
 
     def setupUiEx(self):
         icon = QIcon()
-        appPath=os.path.join(BASE_DIR,u'res\\imgs\\powercable.ico')
+        appPath=os.path.join(BASE_DIR,u'res\\icon\\powercable.ico')
         icon.addPixmap(QPixmap(appPath))
         self.setWindowIcon(icon)
 

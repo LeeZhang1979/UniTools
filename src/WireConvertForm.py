@@ -77,7 +77,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
 
     def setupUiEx(self):
         icon = QIcon()
-        appPath=os.path.join(BASE_DIR,u'res\\imgs\\WireConvert.ico')
+        appPath=os.path.join(BASE_DIR,u'res\\icon\\WireConvert.ico')
         icon.addPixmap(QPixmap(appPath))
         self.setWindowIcon(icon)
 
