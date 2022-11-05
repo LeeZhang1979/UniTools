@@ -200,7 +200,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
              
             iEndRow = self.spbEnd.value()                 
             if iEndRow ==0 or wis.max_row < iEndRow:
-                iEndRow = wis.max_row
+                iEndRow = wis.max_row   
 
             if iStarRow > iEndRow:
                 QMessageBox.warning(self,'线束表转化', '选择的文件:' + originalFile + '及配置无需要转换的数据')
