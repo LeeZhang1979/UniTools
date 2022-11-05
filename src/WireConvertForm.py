@@ -115,11 +115,6 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
     
     def btnStartClick(self):
 
-        #开发测试用，发布时需要删除
-        #self.lineEIFile.setText('C:\\Users\\lezha\\Desktop\\线束表转化.xlsx')
-        #self.lineEOFile.setText('C:\\Users\\lezha\\Desktop\\TEST.xlsx')
-        #开发测试用，发布时需要删除
-
         if len(self.lineEIFile.text())<=0 :
             QMessageBox.critical(self,'线束表转化', '输入文件为空') 
             self.lineEIFile.setFocus()
