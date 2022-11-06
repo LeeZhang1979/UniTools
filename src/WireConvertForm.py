@@ -181,6 +181,32 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
         else:
             return False 
 
+    def fillstyle(self, sRow, eRow, sColumn, eColumn, ws):
+        if eRow<sRow or eColumn<sColumn:
+            return
+        if eRow<1 or eColumn<1:
+            return
+        #左上
+        ws.cell(sRow,sColumn).border = Border(left=Side(style='thick'),top=Side(style='thick'))
+        #右上
+        ws.cell(sRow,eColumn).border = Border(right=Side(style='thick'),top=Side(style='thick'))
+        #左下
+        ws.cell(eRow,sColumn).border = Border(left=Side(style='thick'),bottom=Side(style='thick'))
+        #右下
+        ws.cell(eRow,eColumn).border = Border(right=Side(style='thick'),bottom=Side(style='thick'))
+        #上
+        for i in range(sColumn+1,eColumn):
+            ws.cell(sRow,i).border = Border(top=Side(style='thick'))
+        #下
+        for i in range(sColumn+1,eColumn):
+            ws.cell(eRow,i).border = Border(bottom=Side(style='thick'))
+        #左
+        for i in range(sRow+1,eRow):
+            ws.cell(i,sColumn).border = Border(left=Side(style='thick'))
+        #右
+        for i in range(sRow+1,eRow):
+            ws.cell(i,eColumn).border = Border(right=Side(style='thick'))
+
     def convert(self,originalFile,targetFile):
          
         wib = load_workbook(filename=originalFile,read_only=True,data_only=True) 
@@ -201,13 +227,31 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 QMessageBox.warning(self,'线束表转化', '选择的文件:' + originalFile + '及配置无需要转换的数据')
                 wib.close()
                 return   
+            
+            #检查关键字段不能为空            #
+            self.progressBar.setMinimum(iStarRow)
+            self.progressBar.setMaximum(iEndRow)
+            self.lblProgress.setText(u'检查文件')
+            iCount = 0
+            for iRow in range(iStarRow,iEndRow+1):
+                self.progressBar.setValue(iRow)
+                if wis['A' + str(iRow)].value is None or \
+                    wis['B' + str(iRow)].value is None or \
+                    wis['D' + str(iRow)].value is None or \
+                    wis['F' + str(iRow)].value is None or \
+                    wis['G' + str(iRow)].value is None:        
+                        QMessageBox.critical(self, '线束表转化', originalFile + '文件第【' + str(iRow) +'】行存在空数据或不正确数据')       
+                        wib.close
+                        wb.close
+                        return       
+
             if not self.db.isOpen():
                 if not self.db.open():               
                     QMessageBox.critical(self, '线束表转化', self.db.lastError().text())
                     wib.close
                     wb.close
                     return
-      
+
             query = QSqlQuery() 
             ws = wb.active 
             ws.title = u'线束表转化' 
@@ -336,7 +380,8 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
             iCount = 0
             iYLQDDV = 1
             self.progressBar.setMinimum(iStarRow)
-            self.progressBar.setMaximum(iEndRow)
+            self.progressBar.setMaximum(iEndRow)            
+            self.lblProgress.setText(u'线束转化')
             for iRow in range(iStarRow,iEndRow+1):
                 self.progressBar.setValue(iRow)
                 if strCabledt == str(wis['A' + str(iRow)].value):   #电缆号
@@ -364,6 +409,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                     strStarDevName = wis['G' + str(iRow)].value
                   
                 oCurRow = (iCount - 1) * 14 + 1          # 第一行  电缆组件
+
                 ws.cell(oCurRow,1).value = '1'               #级别号
                 #ws.cell(oCurRow,2).value = ''               #第二列、物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
@@ -489,6 +535,8 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                         dvYL = DataValidation(type='list',formula1=strFormula,allowBlank=True,prompt=u'原缆清单')
                         dvYL.add(ws.cell(oCurRow,2))
                         ws.add_data_validation(dvYL)
+                
+                self.fillstyle((oCurRow-7),(oCurRow+6),1,7,ws)
 
             ws.add_data_validation(dvGX)
             ws.add_data_validation(dvYSG)
