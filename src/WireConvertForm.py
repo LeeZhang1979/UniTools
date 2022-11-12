@@ -243,8 +243,17 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
             self.progressBar.setMaximum(iEndRow)
             self.lblProgress.setText(u'检查文件')
             iCount = 0
+            strCabledt=''
             for iRow in range(iStarRow,iEndRow+1):
                 self.progressBar.setValue(iRow)
+                if wis['A' + str(iRow)].value is None:
+                    QMessageBox.critical(self, '线束表转化', originalFile + '文件第【' + str(iRow) +'】行存在空数据或不正确数据')       
+                    wib.close
+                    wb.close
+                    return
+                if strCabledt == str(wis['A' + str(iRow)].value):   #电缆号
+                    continue
+                strCabledt = str(wis['A' + str(iRow)].value)
                 if wis['A' + str(iRow)].value is None or \
                     wis['B' + str(iRow)].value is None or \
                     wis['D' + str(iRow)].value is None or \
