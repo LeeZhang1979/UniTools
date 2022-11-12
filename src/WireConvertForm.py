@@ -139,6 +139,15 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
         elif s.find("x") >= 0 :            
             return s[0:s.find("x")]
         return ''
+    def __getSizeProperty(self,s):
+        if len(s) == 0:
+            return ''
+        t = self.__rTrimUnit(s)
+        if t.find("G") >= 0 :
+            return t[t.find("G")+1:len(t)]
+        elif s.find("x") >= 0 :            
+            return t[t.find("x"):len(t)]
+        return ''
 
     def __getRCode(self,s):
         if len(s) == 0:
@@ -151,6 +160,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
         if len(s) == 0:
             return ''
         s = s.replace('mm²','')
+        s = s.replace('mm','')
         if s.find(' ') >= 0 :
             s = s[0:s.find(' ')] 
         if len(s)>2:
@@ -257,12 +267,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
             ws.title = u'线束表转化' 
             
             ws = wb.create_sheet(u'线束辅料')     
-            #管型预绝缘端子            
-            if not query.exec(self.__wireaccSql(u'管型预绝缘端子')):
-                QMessageBox.critical(self,'线束表转化', query.lastError().text())
-                wib.close
-                wb.close
-                return
+            
             iRow = 1 
             ws.cell(iRow,1).value = '类别'  
             ws.cell(iRow,2).value = '规格'
@@ -270,6 +275,12 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
             ws.cell(iRow,4).value = '名称'  
             ws.cell(iRow,5).value = '单位'
             iGXStart = 2
+            #管型预绝缘端子            
+            if not query.exec(self.__wireaccSql(u'管型预绝缘端子')):
+                QMessageBox.critical(self,'线束表转化', query.lastError().text())
+                wib.close
+                wb.close
+                return
             while query.next():    
                 iRow += 1         
                 ws.cell(iRow,1).value = str(query.value('classtype'))  
@@ -277,6 +288,33 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.cell(iRow,3).value = str(query.value('itemno'))   
                 ws.cell(iRow,4).value = str(query.value('itemname'))  
                 ws.cell(iRow,5).value = str(query.value('unit'))  
+            
+            #DT端子            
+            if not query.exec(self.__wireaccSql(u'DT端子')):
+                QMessageBox.critical(self,'线束表转化', query.lastError().text())
+                wib.close
+                wb.close
+                return
+            while query.next():    
+                iRow += 1         
+                ws.cell(iRow,1).value = str(query.value('classtype'))  
+                ws.cell(iRow,2).value = str(query.value('spec'))   
+                ws.cell(iRow,3).value = str(query.value('itemno'))   
+                ws.cell(iRow,4).value = str(query.value('itemname'))  
+                ws.cell(iRow,5).value = str(query.value('unit'))             
+            #OT端子            
+            if not query.exec(self.__wireaccSql(u'OT端子')):
+                QMessageBox.critical(self,'线束表转化', query.lastError().text())
+                wib.close
+                wb.close
+                return
+            while query.next():    
+                iRow += 1         
+                ws.cell(iRow,1).value = str(query.value('classtype'))  
+                ws.cell(iRow,2).value = str(query.value('spec'))   
+                ws.cell(iRow,3).value = str(query.value('itemno'))   
+                ws.cell(iRow,4).value = str(query.value('itemname'))  
+                ws.cell(iRow,5).value = str(query.value('unit')) 
             iGXEnd = iRow
             strGXDataRange = '=线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd)
             dvGX = DataValidation(type='list',formula1=strGXDataRange,allowBlank=True,prompt=u'选择绝缘端子')
@@ -424,6 +462,23 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$C$' + str(iGXStart) +':$C$' + str(iGXEnd) + '),2,FALSE)'               #第二列、无物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
                 dvGX.add(ws.cell(oCurRow,4))
+                strTemp = self.__getSizeProperty(strProperty)
+                if(strTemp == '0.34'):
+                    ws.cell(oCurRow,4).value =  u'管形预绝缘端子_A0.34-10ET'  #第四列
+                elif (strTemp=='0.5'):
+                    ws.cell(oCurRow,4).value =  u'管形预绝缘端子_A0.5-10ET'  #第四列 
+                elif(strTemp =='1'):
+                    ws.cell(oCurRow,4).value =  u'带绝缘欧式端子_A1-10ET'  #第四列
+                elif(strTemp =='1.5'):
+                    ws.cell(oCurRow,4).value =  u'管形预绝缘端子_A1.5-10ET'  #第四列
+                elif(strTemp =='2.5'):
+                    ws.cell(oCurRow,4).value =  u'管形预绝缘端子_A2.5-10ET'  #第四列
+                elif(strTemp =='16'):
+                    ws.cell(oCurRow,4).value =  u'管形预绝缘端子_A16-10ET'  #第四列
+                elif(strTemp =='25'):
+                    ws.cell(oCurRow,4).value =  u'接线端子_KRF25-8'  #第四列
+                elif(strTemp =='50'):
+                    ws.cell(oCurRow,4).value =  u'接线端子_KRF50-10'  #第四列
                 strTemp = self.__getCoresFromProperty(strProperty)
                 ws.cell(oCurRow,5).value = strTemp               #第五列  
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$E$' + str(iGXStart) +':$E$' + str(iGXEnd) + '),2,FALSE)'               #第六列 
@@ -437,6 +492,19 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$C$' + str(iYSGStart) +':$C$' + str(iYSGEnd) + '),2,FALSE)'               #第二列、无物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
                 dvYSG.add(ws.cell(oCurRow,4))
+                strTemp = self.__rTrimUnit(strLength)
+                if self.isNumber(strTemp): 
+                    if float(strTemp) <= 9.5:     
+                        ws.cell(oCurRow,4).value =  u'热缩管_D9,5/4,8'
+                    elif float(strTemp) <= 12.7:     
+                        ws.cell(oCurRow,4).value =  u'热缩管_D12.7/6.4mm_Black'
+                    elif float(strTemp) <= 19.0:     
+                        ws.cell(oCurRow,4).value =  u'热缩管_Φ19.0/9.5mm_Black'
+                    elif float(strTemp) <= 30.0:     
+                        ws.cell(oCurRow,4).value =  u'热缩管_Φ30/15mm_Black'
+                    elif float(strTemp) <= 50.8:     
+                        ws.cell(oCurRow,4).value =  u'热缩管_Ф50.8/25.4mm_Black'
+                
                 ws.cell(oCurRow,5).value = strLength               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$E$' + str(iYSGStart) +':$E$' + str(iYSGEnd) + '),2,FALSE)'               #第六列 
                 ws.cell(oCurRow,7).value = ''                #第七列 
@@ -449,7 +517,7 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.cell(oCurRow,2).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$C$' + str(iXBStart) +':$C$' + str(iXBEnd) + '),2,FALSE)'               #第二列、无物料号
                 ws.cell(oCurRow,3).value = 'L'               #第三列 
                 dvXB.add(ws.cell(oCurRow,4))
-                ws.cell(oCurRow,4).value =  ''  #第四列
+                ws.cell(oCurRow,4).value =  u'标签_40X27MM White'  #第四列
                 ws.cell(oCurRow,5).value = '1'               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$E$' + str(iXBStart) +':$E$' + str(iXBEnd) + '),2,FALSE)'               #第六列 
                 ws.cell(oCurRow,7).value = ''                #第七列 
