@@ -491,9 +491,9 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 strTemp = self.__getCoresFromProperty(strProperty)
                 ws.cell(oCurRow,5).value = strTemp               #第五列  
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iGXStart) +':$D$' + str(iGXEnd) +',线束辅料!$E$' + str(iGXStart) +':$E$' + str(iGXEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oCurRow,7).value = ''                #第七列  
+                ws.cell(oCurRow,7).value = ' '                #第七列  
                 for icolumn in range(1,8):
-                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
+                    ws.cell(oDupRow,icolumn).value = '='  + get_column_letter(icolumn) + str(oCurRow)
                  
                 oCurRow += 1                                # 第三行 and 第十三行   热缩管
                 oDupRow = oCurRow + 10
@@ -516,9 +516,9 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 
                 ws.cell(oCurRow,5).value = strLength               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iYSGStart) +':$D$' + str(iYSGEnd) +',线束辅料!$E$' + str(iYSGStart) +':$E$' + str(iYSGEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oCurRow,7).value = ''                #第七列 
+                ws.cell(oCurRow,7).value = ' '                 #第七列 
                 for icolumn in range(1,8):
-                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
+                    ws.cell(oDupRow,icolumn).value = '='  + get_column_letter(icolumn) + str(oCurRow)
                 
                 oCurRow += 1                            # 第四行 and 第十行  线标 标签 
                 oDupRow = oCurRow + 6
@@ -529,15 +529,15 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                 ws.cell(oCurRow,4).value =  u'标签_40X27MM White'  #第四列
                 ws.cell(oCurRow,5).value = '1'               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iXBStart) +':$D$' + str(iXBEnd) +',线束辅料!$E$' + str(iXBStart) +':$E$' + str(iXBEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oCurRow,7).value = ''                #第七列 
+                ws.cell(oCurRow,7).value = ' '                 #第七列 
                 for icolumn in range(1,8):
-                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
+                    ws.cell(oDupRow,icolumn).value = '='   + get_column_letter(icolumn) + str(oCurRow)
                 
                 #第五、六， 十一，十二 为标签
                 oCurRow += 1                            # 第五、六， 十一，十二 为标签
                 oDupRow = oCurRow + 6                
                 ws.merge_cells(start_row=oCurRow,start_column=4,end_row=oCurRow+1,end_column=4)
-                ws.cell(oCurRow, 4).value = strCabledt + '\n' + self.__getRCode(strStarDevName) + '\n' + strStarDevFun  #第四列                
+                ws.cell(oCurRow, 4).value = strCabledt + '-' + self.__getRCode(strStarDevName) + '\n' + strStarDevFun  #第四列                
                 ws.cell(oCurRow, 4).alignment = Alignment(horizontal='center',vertical='center',wrapText=True)
                 rule1  = FormulaRule(formula=['$B' + str(oCurRow -1) +'="DFB00052144"'],fill=black,stopIfTrue=True,font=fontwhite)
                 rule2  = FormulaRule(formula=['$B' + str(oCurRow -1) +'="DFB00052145"'],fill=white,stopIfTrue=True,font=fontblack)
@@ -575,9 +575,9 @@ class WireConvertForm(QMainWindow,Ui_WireConvertForm):
                         ws.cell(oCurRow,4).value =  u'电缆扎带 Cable tie 2.5×100 MM'
                 ws.cell(oCurRow,5).value = '1'               #第五列 
                 ws.cell(oCurRow,6).value = '=VLOOKUP(D' + str(oCurRow) +',IF({1,0},线束辅料!$D$' + str(iZDStart) +':$D$' + str(iZDEnd) +',线束辅料!$E$' + str(iZDStart) +':$E$' + str(iZDEnd) + '),2,FALSE)'               #第六列 
-                ws.cell(oCurRow,7).value = ''                #第七列 
+                ws.cell(oCurRow,7).value = ' '                 #第七列 
                 for icolumn in range(1,8):
-                    ws.cell(oDupRow,icolumn).value = '=' + get_column_letter(icolumn) + str(oCurRow)
+                    ws.cell(oDupRow,icolumn).value = '='  + get_column_letter(icolumn) + str(oCurRow)
                 
                 oCurRow += 1            #第八行
                 ws.cell(oCurRow,1).value = '2'               #级别号
