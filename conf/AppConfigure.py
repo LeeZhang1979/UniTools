@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# coding=utf-8
+
 import xml.dom.minidom as xmldom
 import os
 

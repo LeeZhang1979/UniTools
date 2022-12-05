@@ -28,6 +28,7 @@
     以下内容安装过程，如需要升级pip，注意升级版本
     pip install sip
     pip install openpyxl
+    pip install configparser
     pip install PyQt5 
     pip install pyqt5designer 
     pip install pyinstaller
