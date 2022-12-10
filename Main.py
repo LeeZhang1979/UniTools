@@ -5,7 +5,8 @@ import os
 import sys 
 import socket
 import configparser
-import subprocess
+import subprocess 
+import ctypes
 
 from PyQt5 import QtCore
 
@@ -61,14 +62,21 @@ def check_Upgrade():
 
     ##config.set("Application","Version",serverVersion)
     return True
-
+ 
 def main(): 
+   
+    if not ctypes.windll.shell32.IsUserAnAdmin(): 
+        if sys.version_info[0] == 3:
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1) 
+        else:   
+            ctypes.windll.shell32.ShellExecuteW(None, u"runas", unicode(sys.executable), unicode(__file__), None, 1)
+
     if check_Upgrade():
         subprocess.Popen("upgrade.bat")
         sys.exit()
 
-    app = QApplication(sys.argv) 
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    app = QApplication(sys.argv) 
     mwin= MainWindow()
     mwin.show()
    

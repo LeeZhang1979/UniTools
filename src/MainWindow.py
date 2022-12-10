@@ -5,7 +5,8 @@
  
 import os
 import subprocess
-import sys
+import sys 
+
 from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
 from PyQt5.QtGui import QPalette, QBrush, QPixmap, QIcon
 from src.MDMForm import MDMForm 
@@ -60,8 +61,14 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         #QMessageBox.information(self,"提示框","复制成功")
     
     def menuPowerConvert(self):
-        appPath=os.path.join(BASE_DIR,u'变压器计算程序.exe')
-        os.system('start ' + appPath)         
+        try:
+            appPath=os.path.join(BASE_DIR,u'变压器计算程序.exe')
+            subprocess.Popen(appPath)
+            #os.system('start ' + appPath)         
+        except PermissionError as reason : 
+            QMessageBox.critical(self,'调用外部程序失败',str(reason))  
+        except : 
+            QMessageBox.critical(self,'调用外部程序失败','调用外部程序失败!')  
 
     def menuConfigure(self):
         self.mdmWin = MDMForm()
