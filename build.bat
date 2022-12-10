@@ -1,1 +1,2 @@
-pyinstaller UniTools.spec --clean
+pyinstaller UniTools.spec --clean --noconfirm
+

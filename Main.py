@@ -11,6 +11,7 @@ import ctypes
 from PyQt5 import QtCore
 
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
 
 BASE_DIR= os.path.dirname(os.path.abspath(__file__) )  
 sys.path.append( BASE_DIR  ) 
@@ -34,7 +35,6 @@ def check_Upgrade():
     config = configparser.ConfigParser()
     config.read(os.path.join(BASE_DIR,u'conf\\App.ini'))
     localVersion = config["Application"]["Version"] 
-    foraceUpgrade = config["Application"]["ForceUpgrade"]
     companyNetwork = config["Server"]["CompanyNetwork"] 
     serverAddress = config["Server"]["Address"] 
 
@@ -43,9 +43,22 @@ def check_Upgrade():
 
     config.read(os.path.join(serverAddress,u'conf\\App.ini'))
     serverVersion = config["Application"]["Version"] 
+    foraceUpgrade = config["Application"]["ForceUpgrade"]
     if localVersion >= serverVersion:
         return False
-    
+    '''
+    #暂未启用，需要导入消息框类库或转移升级程序到MainWindow.py
+    strMsg = '服务端版本:[' + serverVersion + '],本地版本:[' + localVersion + ']'
+    if foraceUpgrade == '1':
+        strMsg = strMsg + ',本次版本强制升级!'
+        buttons = QMessageBox.Yes
+    else:
+        strMsg = strMsg + ',是否需要升级?'
+        buttons = QMessageBox.Yes|QMessageBox.No
+
+    if QMessageBox.show(0, '版本检查', strMsg,buttons,QMessageBox.Yes) != QMessageBox.Yes:
+        return False 
+    '''
     bat_file = open('upgrade.bat', 'w')
     # 关闭bat脚本的输出
     upgrade_bat = 'echo off\n'
@@ -55,8 +68,9 @@ def check_Upgrade():
     upgrade_bat += f'XCOPY {serverAddress} {BASE_DIR} /S /Y\n'
     print (f'XCOPY \\\\{serverAddress} {BASE_DIR} /S /Y\n')
     # 启动新程序
-    upgrade_bat += fr'start {__file__}' 
-    print(fr'start {__file__}' )
+    app=os.path.join(BASE_DIR,u'UniTools.exe')
+    upgrade_bat += fr'start {app}' 
+    print(fr'start {app}' )
     bat_file.write(upgrade_bat)
     bat_file.close()
 
@@ -65,11 +79,13 @@ def check_Upgrade():
  
 def main(): 
    
+
     if not ctypes.windll.shell32.IsUserAnAdmin(): 
+        app=os.path.join(BASE_DIR,u'UniTools.exe')
         if sys.version_info[0] == 3:
-            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1) 
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, app, None, 1) 
         else:   
-            ctypes.windll.shell32.ShellExecuteW(None, u"runas", unicode(sys.executable), unicode(__file__), None, 1)
+            ctypes.windll.shell32.ShellExecuteW(None, u"runas", unicode(sys.executable), unicode(app), None, 1)
 
     if check_Upgrade():
         subprocess.Popen("upgrade.bat")
@@ -78,6 +94,7 @@ def main():
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv) 
     mwin= MainWindow()
+    
     mwin.show()
    
     sys.exit(app.exec_())

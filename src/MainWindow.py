@@ -19,7 +19,7 @@ from conf.AppConfigure import AppConfigure,Appconfig
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     appEvent = AppConfigure()
-
+        
     def __init__(self):
         super().__init__()
         self.setupUi(self)

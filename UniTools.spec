@@ -22,13 +22,13 @@ py_files = [
 data_files = [    
     ('conf\\AppConfigs.xml','conf\\'),
     ('conf\\App.ini','conf\\'),    
+    ('db\\mdm.db','db\\'),
     ('res\\*.docx','res\\'),  
     ('res\\*.xls','res\\'),
     ('res\\*.xlsx','res\\'),
     ('res\\*.pdf','res\\'),
     ('res\\imgs\\*','res\\imgs\\'),
-    ('res\\icon\\*','res\\icon\\'),
-    ('db\\mdm.db','db\\')
+    ('res\\icon\\*','res\\icon\\')
 ]
 
 binaries_files=[
