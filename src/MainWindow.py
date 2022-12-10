@@ -49,15 +49,20 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.actionConfigure.triggered.connect(self.menuConfigure)
         self.actionPowerCableCal.triggered.connect(self.menuPowerCableCal)
         self.actionWireConvert.triggered.connect(self.menuWireConvert)
+        self.actionPowerConvert.triggered.connect(self.menuPowerConvert)
 
     def tool01Click(self):
 
-        appPath=os.path.join(BASE_DIR,u'docs\\风力发电机组短路电流计算.xlsx')
+        appPath=os.path.join(BASE_DIR,u'res\\风力发电机组短路电流计算.xlsx')
         #subprocess.run(appPath)
         os.system('start ' + appPath)
         #os.startfile(appPath)
         #QMessageBox.information(self,"提示框","复制成功")
     
+    def menuPowerConvert(self):
+        appPath=os.path.join(BASE_DIR,u'变压器计算程序.exe')
+        os.system('start ' + appPath)         
+
     def menuConfigure(self):
         self.mdmWin = MDMForm()
         self.mdmWin.show()

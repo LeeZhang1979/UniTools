@@ -21,15 +21,23 @@ py_files = [
 
 data_files = [    
     ('conf\\AppConfigs.xml','conf\\'),
-    ('conf\\App.ini','conf\\'),
+    ('conf\\App.ini','conf\\'),    
+    ('res\\*.docx','res\\'),  
+    ('res\\*.xls','res\\'),
+    ('res\\*.xlsx','res\\'),
+    ('res\\*.pdf','res\\'),
     ('res\\imgs\\*','res\\imgs\\'),
     ('res\\icon\\*','res\\icon\\'),
-    ('db\\mdm.db','db\\'),
-    ('docs\\*','docs\\')
+    ('db\\mdm.db','db\\')
 ]
+
+binaries_files=[
+    ('变压器计算程序.exe','.\\')
+    ]
+
 a = Analysis(py_files,
     pathex=[],
-    binaries=[],
+    binaries=binaries_files,
     datas=data_files,
     hiddenimports=[],
     hooksconfig={},
