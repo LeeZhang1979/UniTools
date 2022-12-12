@@ -51,6 +51,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.actionPowerCableCal.triggered.connect(self.menuPowerCableCal)
         self.actionWireConvert.triggered.connect(self.menuWireConvert)
         self.actionPowerConvert.triggered.connect(self.menuPowerConvert)
+        self.actionCableMSTOptimizer.triggered.connect(self.menuCableMSTOptimizer)
 
     def tool01Click(self):
 
@@ -60,15 +61,26 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         #os.startfile(appPath)
         #QMessageBox.information(self,"提示框","复制成功")
     
-    def menuPowerConvert(self):
+    def menuCableMSTOptimizer(self):
         try:
-            appPath=os.path.join(BASE_DIR,u'变压器计算程序.exe')
+            appPath=os.path.join(BASE_DIR,u'CableMSTOptimizer.exe')
             subprocess.Popen(appPath)
             #os.system('start ' + appPath)         
         except PermissionError as reason : 
             QMessageBox.critical(self,'调用外部程序失败',str(reason))  
         except : 
-            QMessageBox.critical(self,'调用外部程序失败','调用外部程序失败!')  
+            QMessageBox.critical(self,'调用外部程序失败','调用外部程序[CableMSTOptimizer.exe]失败!')  
+
+
+    def menuPowerConvert(self):
+        try:
+            appPath=os.path.join(BASE_DIR,u'PowerConverter.exe')
+            subprocess.Popen(appPath)
+            #os.system('start ' + appPath)         
+        except PermissionError as reason : 
+            QMessageBox.critical(self,'调用外部程序失败',str(reason))  
+        except : 
+            QMessageBox.critical(self,'调用外部程序失败','调用外部程序[PowerConverter.exe]失败!')  
 
     def menuConfigure(self):
         self.mdmWin = MDMForm()

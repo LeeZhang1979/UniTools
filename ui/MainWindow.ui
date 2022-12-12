@@ -96,6 +96,7 @@
     <addaction name="actionPowerCableCal"/>
     <addaction name="actionWireConvert"/>
     <addaction name="actionPowerConvert"/>
+    <addaction name="actionCableMSTOptimizer"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuTool"/>
@@ -124,6 +125,11 @@
   <action name="actionPowerConvert">
    <property name="text">
     <string>变压器计算</string>
+   </property>
+  </action>
+  <action name="actionCableMSTOptimizer">
+   <property name="text">
+    <string>海缆拓扑优化</string>
    </property>
   </action>
  </widget>

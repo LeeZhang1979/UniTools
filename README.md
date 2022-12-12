@@ -32,3 +32,10 @@
     pip install PyQt5 
     pip install pyqt5designer 
     pip install pyinstaller
+
+    pip install xlwings
+    pip install wxPython
+    pip install python-docx
+
+    pip install pandas
+    pip install matplotlib
