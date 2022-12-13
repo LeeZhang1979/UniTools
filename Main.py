@@ -31,7 +31,7 @@ def is_company_network(companynetwork):
 
 def check_Upgrade():
     config = configparser.ConfigParser()
-    config.read(os.path.join(BASE_DIR,'conf\\App.ini'))
+    config.read(os.path.join(BASE_DIR,'conf\\App.ini'),encoding='utf-8')
     localVersion = config["Application"]["Version"] 
     companyNetwork = config["Server"]["CompanyNetwork"] 
     serverAddress = config["Server"]["Address"] 
@@ -39,7 +39,7 @@ def check_Upgrade():
     if not is_company_network(companyNetwork):
         return False    
 
-    config.read(os.path.join(serverAddress,'conf\\App.ini'))
+    config.read(os.path.join(serverAddress,'conf\\App.ini'),encoding='utf-8')
     serverVersion = config["Application"]["Version"] 
     foraceUpgrade = config["Application"]["ForceUpgrade"]
     if localVersion >= serverVersion:
@@ -57,7 +57,7 @@ def check_Upgrade():
     if QMessageBox.show(0, '版本检查', strMsg,buttons,QMessageBox.Yes) != QMessageBox.Yes:
         return False 
     '''
-    bat_file = open('upgrade.bat', 'w')
+    bat_file = open('upgrade.bat', 'w',encoding='utf-8')
     # 关闭bat脚本的输出
     upgrade_bat = 'echo off\n'
     # 3秒后删除旧程序(3秒后程序己运行结束;不延时的话,会提示被占用,无法删除)
