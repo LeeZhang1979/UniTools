@@ -9,9 +9,7 @@ import subprocess
 import ctypes
 
 from PyQt5 import QtCore
-
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
 
 BASE_DIR= os.path.dirname(os.path.abspath(__file__) )  
 sys.path.append( BASE_DIR  ) 
@@ -33,7 +31,7 @@ def is_company_network(companynetwork):
 
 def check_Upgrade():
     config = configparser.ConfigParser()
-    config.read(os.path.join(BASE_DIR,u'conf\\App.ini'))
+    config.read(os.path.join(BASE_DIR,'conf\\App.ini'))
     localVersion = config["Application"]["Version"] 
     companyNetwork = config["Server"]["CompanyNetwork"] 
     serverAddress = config["Server"]["Address"] 
@@ -41,7 +39,7 @@ def check_Upgrade():
     if not is_company_network(companyNetwork):
         return False    
 
-    config.read(os.path.join(serverAddress,u'conf\\App.ini'))
+    config.read(os.path.join(serverAddress,'conf\\App.ini'))
     serverVersion = config["Application"]["Version"] 
     foraceUpgrade = config["Application"]["ForceUpgrade"]
     if localVersion >= serverVersion:
