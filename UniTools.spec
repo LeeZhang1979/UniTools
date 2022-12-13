@@ -32,7 +32,8 @@ data_files = [
 ]
 
 binaries_files=[
-    ('变压器计算程序.exe','.\\')
+    ('PowerConverter.exe','.\\'),
+    ('CableMSTOptimizer.exe','.\\')
     ]
 
 a = Analysis(py_files,
