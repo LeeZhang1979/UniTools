@@ -64,7 +64,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def menuCableMSTOptimizer(self):
         try:
             appPath=os.path.join(BASE_DIR,u'CableMSTOptimizer.exe')
-            subprocess.Popen(appPath)
+            proc = subprocess.Popen(appPath)
+            
             #os.system('start ' + appPath)         
         except PermissionError as reason : 
             QMessageBox.critical(self,'调用外部程序失败',str(reason))  

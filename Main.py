@@ -31,7 +31,7 @@ def is_company_network(companynetwork):
 
 def check_Upgrade():
     config = configparser.ConfigParser()
-    config.read(os.path.join(BASE_DIR,'conf\\App.ini'),encoding='utf-8')
+    config.read(os.path.join(BASE_DIR,u'conf\\App.ini'),encoding='utf-8')
     localVersion = config["Application"]["Version"] 
     companyNetwork = config["Server"]["CompanyNetwork"] 
     serverAddress = config["Server"]["Address"] 
@@ -39,7 +39,7 @@ def check_Upgrade():
     if not is_company_network(companyNetwork):
         return False    
 
-    config.read(os.path.join(serverAddress,'conf\\App.ini'),encoding='utf-8')
+    config.read(os.path.join(serverAddress,u'conf\\App.ini'),encoding='utf-8')
     serverVersion = config["Application"]["Version"] 
     foraceUpgrade = config["Application"]["ForceUpgrade"]
     if localVersion >= serverVersion:
