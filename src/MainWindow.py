@@ -6,6 +6,7 @@
 import os
 import subprocess
 import sys 
+import win32gui
 
 from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
 from PyQt5.QtGui import QPalette, QBrush, QPixmap, QIcon
@@ -65,7 +66,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         try:
             appPath=os.path.join(BASE_DIR,u'CableMSTOptimizer.exe')
             proc = subprocess.Popen(appPath)
-            
+            win32gui.SetForegroundWindow(proc.pid)
+
             #os.system('start ' + appPath)         
         except PermissionError as reason : 
             QMessageBox.critical(self,'调用外部程序失败',str(reason))  
@@ -76,7 +78,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def menuPowerConvert(self):
         try:
             appPath=os.path.join(BASE_DIR,u'PowerConverter.exe')
-            subprocess.Popen(appPath)
+            proc = subprocess.Popen(appPath)
+            
             #os.system('start ' + appPath)         
         except PermissionError as reason : 
             QMessageBox.critical(self,'调用外部程序失败',str(reason))  
