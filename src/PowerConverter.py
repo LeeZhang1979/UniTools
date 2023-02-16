@@ -30,7 +30,7 @@ doc2Tables = ['RZJS-B8', 'RZJS-D10', 'RZJS-D14', 'RZJS-C8', 'RZJS-F10', 'RZJS-G1
               'RZJS-O17', 'RZJS-C20', 'RZJS-E20', 'RZJS-M10', 'RZJS-M14', 'RZJS-N10', 'RZJS-G8', ]
 
 # 打开docx文件
-doc = Document('./res/计算报告-模板.docx')
+doc = Document('./docs/计算报告-模板.docx')
 RZJSString = ['RZJS-C3', 'RZJS-D10', 'RZJS-D14', 'RZJS-B5', 'RZJS-C5', 'RZJS-C8', 'RZJS-F10', 'RZJS-G10', 'RZJS-N10',
               'RZJS-N11', 'RZJS-M10', 'RZJS-M14', 'RZJS-M15', 'RZJS-H20', 'RZJS-H23', 'RZJS-G8', 'RZJS-C20', 'RZJS-C23',
               'RZJS-E20', 'RZJS-E23', 'RZJS-E28', 'RZJS-B17', 'RZJS-B28', 'RZJS-I17', 'RZJS-C21', 'RZJS-B8',
@@ -59,7 +59,7 @@ qLiangWeiXiaoShuR = ['E27', 'F27', 'E33', 'F33', 'K228']
 
 wuWeiXiaoShu = ['B50']
 
-filePathShuRu = './res/短路力计算表格.xls'
+filePathShuRu = './docs/短路力计算表格.xls'
 sheetShuRu = '输入表'
 sheetShuChu = '输出表'
 wToDuanLuLi = [('J10', 'B8'), ('p10','b8'), ('j11', 'd10'), ('p11', 'd14'), ('j15', 'h24'), ('p15', 'h24'), ('j39', 'c69'),
@@ -68,7 +68,7 @@ wToDuanLuLi = [('J10', 'B8'), ('p10','b8'), ('j11', 'd10'), ('p11', 'd14'), ('j1
                ('p47', 'e46'),  ('j48', 'b75'), ('p48', 'b42'), ('j49', 'e75'), ('p49', 'e42'), ('j57', 'c190')]
 
 sheetZhuCai = '主材'
-filePathChengBen = './res/应该成本模板 变压器-35kV-20210810.V2.0(1).xlsx'
+filePathChengBen = './docs/应该成本模板 变压器-35kV-20210810.V2.0(1).xlsx'
 zhuCaiQT = [('e3', 'c52'), ('e7', 'c64'), ('e8', 'd58')]
 zhuCaiRZ = [('e4', 'c85'), ('e5', 'c52')]
 
@@ -83,7 +83,7 @@ sheet2Name = "QTJS"
 # 打开excel文件
 appEx = xw.App(visible=False, add_book=False)
 appEx.screen_updating = False
-filePath = "./res/35kV计算单-全铜5_6.xls"
+filePath = "./docs/35kV计算单-全铜5_6.xls"
 wb = appEx.books.open(filePath)
 sheet = wb.sheets[sheet1Name]
 
@@ -230,7 +230,7 @@ def ExportDoc(event):
     doc.styles['Normal'].font.size = Pt(9)
     doc.save("./计算报告-结果.docx")
 
-    doc2 = Document('./res/PA-21-XXX V5风力发电机组35kV 8800kVA油浸式变压器技术协议_供应商-模板.docx')
+    doc2 = Document('./docs/PA-21-XXX V5风力发电机组35kV 8800kVA油浸式变压器技术协议_供应商-模板.docx')
     for table2 in doc2.tables:
         for row in table2.rows:
             for cell in row.cells:
@@ -279,6 +279,7 @@ nb.AddPage(p1, "电气参数")
 nb.AddPage(p2, "绕组计算")
 frame.Show()
 app.MainLoop()
+
 
 class MyPanel1(wx.Panel):
     def __init__(self, parent):
@@ -484,6 +485,7 @@ class MyPanel1(wx.Panel):
         vLine = wx.StaticLine(self, pos=(30, 0), size=(2, 600))
 
     def __del__(self):
+        appEx.quit()
         pass
 
     def EndTextK23(self, event):

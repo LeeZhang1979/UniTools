@@ -56,7 +56,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def tool01Click(self):
 
-        appPath=os.path.join(BASE_DIR,u'res\\风力发电机组短路电流计算.xlsx')
+        appPath=os.path.join(BASE_DIR,u'docs\\风力发电机组短路电流计算.xlsx')
         #subprocess.run(appPath)
         os.system('start ' + appPath)
         #os.startfile(appPath)

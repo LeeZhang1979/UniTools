@@ -3,7 +3,9 @@
 __pycache__
 dist
 build
+outputs
 ~*.xlsx
 ~*.xls
 ~*.docx
 ~*.doc
+update.bat
