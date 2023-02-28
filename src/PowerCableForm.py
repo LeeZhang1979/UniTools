@@ -127,7 +127,7 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
         self.btnExport.clicked.connect(self.btnExportClick)
         self.tblList.itemDoubleClicked.connect(self.tblSelected)
     
-    def initData(self): 
+    def initData(self):  
         self.cleanResult()        
         self.tblList.clearContents()
         self.tblList.setRowCount(0)
