@@ -1,7 +1,7 @@
 1. 下载安装Python 3.8.10版本 https://www.python.org/downloads/
     不要用最新版本，很多Python的第三方库及案例代码都采用的较老版本
     https://www.python.org/downloads/release/python-3810/
-    安装时建议不用安装到默认目录（当前用户的目录），建议在C或D盘的根目录建立Python380目录
+    安装时建议不用安装到默认目录（当前用户的目录），建议在C或D盘的根目录建立Python38目录
     如： C:\Python38
 
 2. 下载安装SQLiteStudio https://sqlitestudio.pl/
