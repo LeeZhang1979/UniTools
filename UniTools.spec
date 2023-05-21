@@ -23,10 +23,10 @@ data_files = [
     ('conf\\AppConfigs.xml','conf\\'),
     ('conf\\App.ini','conf\\'),    
     ('db\\mdm.db','db\\'),
-    ('docs\\*.docx','res\\'),  
-    ('docs\\*.xls','res\\'),
-    ('docs\\*.xlsx','res\\'),
-    ('docs\\*.pdf','res\\'),
+    ('docs\\*.docx','docs\\'),  
+    ('docs\\*.xls','docs\\'),
+    ('docs\\*.xlsx','docs\\'),
+    ('docs\\*.pdf','docs\\'),
     ('res\\imgs\\*','res\\imgs\\'),
     ('res\\icon\\*','res\\icon\\')
 ]
