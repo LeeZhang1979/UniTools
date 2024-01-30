@@ -29,8 +29,8 @@
     pip install sip
     pip install openpyxl
     pip install configparser
-    pip install PyQt5 
-    pip install pyqt5designer 
+    pip install PyQt6 
+    pip install pyqt6-tools 
     pip install pyinstaller
 
     pip install xlwings

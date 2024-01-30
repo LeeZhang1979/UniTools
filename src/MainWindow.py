@@ -8,8 +8,8 @@ import subprocess
 import sys 
 import win32gui
 
-from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox
-from PyQt5.QtGui import QPalette, QBrush, QPixmap, QIcon
+from PyQt6.QtWidgets import QApplication,QMainWindow,QMessageBox
+from PyQt6.QtGui import QPalette, QBrush, QPixmap, QIcon
 from src.MDMForm import MDMForm 
 from src.PowerCableForm import PowerCableForm
 from src.WireConvertForm import WireConvertForm
@@ -28,9 +28,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.addEvent() 
     
     def setUiEx(self):
+
         palette = QPalette()
         appPath=os.path.join(BASE_DIR,u'res\\imgs\\small.png')
-        palette.setBrush(QPalette.Background, QBrush(QPixmap(appPath)))        
+        palette.setBrush(QPalette.ColorRole.Window,QBrush(QPixmap(appPath))) 
         self.setPalette(palette)
         icon = QIcon()
         appPath=os.path.join(BASE_DIR,u'res\\icon\\UniTools.ico')

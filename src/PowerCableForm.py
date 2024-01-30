@@ -6,13 +6,14 @@
 import os 
 import sys 
 import math
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPalette,QPixmap, QIcon, QImage, QRegExpValidator,QColor
-from PyQt5.QtWidgets import QMainWindow,QMessageBox,QTableWidgetItem,QFileDialog
-from PyQt5.QtCore import QRegExp 
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtGui import QPalette,QPixmap, QIcon, QImage, QColor
+from PyQt6.QtGui import QRegularExpressionValidator
+from PyQt6.QtWidgets import QMainWindow,QMessageBox,QTableWidgetItem,QFileDialog
+from PyQt6.QtCore import QRegularExpression 
 
-from PyQt5 import QtSql
-from PyQt5.QtSql import QSqlQuery
+from PyQt6 import QtSql
+from PyQt6.QtSql import QSqlQuery
 
 from openpyxl import Workbook 
 from openpyxl.styles import Alignment
@@ -81,40 +82,40 @@ class PowerCableForm(QMainWindow,Ui_PowerCableForm):
 
     def addConnect(self):
         #单绕组电流(A) 5位以内>0整数
-        intReg = QRegExp('^[1-9][0-9]{1,4}')
-        regExpValidator = QRegExpValidator(intReg)
+        intReg = QRegularExpression('^[1-9][0-9]{1,4}')
+        regExpValidator = QRegularExpressionValidator(intReg)
         self.lineEEC.setValidator(regExpValidator)
         #绕组数 3位以内>0整数
-        intReg = QRegExp('^[1-9][0-9]{1,2}')
-        regExpValidator = QRegExpValidator(intReg) 
+        intReg = QRegularExpression('^[1-9][0-9]{1,2}')
+        regExpValidator = QRegularExpressionValidator(intReg) 
         self.lineEWings.setValidator(regExpValidator) 
         #长度 5位以内>=0浮点数 +2位小数
-        floatReg = QRegExp('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
-        regExpValidator = QRegExpValidator(floatReg)
+        floatReg = QRegularExpression('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
+        regExpValidator = QRegularExpressionValidator(floatReg)
         self.lineELong.setValidator(regExpValidator) 
         #单价 5位以内>=0浮点数 +2位小数
-        floatReg = QRegExp('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
-        regExpValidator = QRegExpValidator(floatReg)
+        floatReg = QRegularExpression('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
+        regExpValidator = QRegularExpressionValidator(floatReg)
         self.lineEPrice.setValidator(regExpValidator) 
         #标称截面积(㎜²) 5位以内>=0浮点数 +2位小数
-        floatReg = QRegExp('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
-        regExpValidator = QRegExpValidator(floatReg)
+        floatReg = QRegularExpression('^([0]|[1-9][0-9]{0,4})(?:\.\d{1,2})?$|(^\t?$)')
+        regExpValidator = QRegularExpressionValidator(floatReg)
         self.lineECS.setValidator(regExpValidator) 
         #环温(°C)  4位以内>=0整数
-        intReg = QRegExp('^([0]|[1-9][0-9]{1,3})')
-        regExpValidator = QRegExpValidator(intReg)
+        intReg = QRegularExpression('^([0]|[1-9][0-9]{1,3})')
+        regExpValidator = QRegularExpressionValidator(intReg)
         self.lineEAmbientT.setValidator(regExpValidator)  
         #护套耐温(°C) 4位以内>=0整数
-        intReg = QRegExp('^([0]|[1-9][0-9]{1,3})')
-        regExpValidator = QRegExpValidator(intReg)  
+        intReg = QRegularExpression('^([0]|[1-9][0-9]{1,3})')
+        regExpValidator = QRegularExpressionValidator(intReg)  
         self.lineESTR.setValidator(regExpValidator)   
         #托盘/梯架数 1,2,3
-        intReg = QRegExp('[1-3]?')
-        regExpValidator = QRegExpValidator(intReg)  
+        intReg = QRegularExpression('[1-3]?')
+        regExpValidator = QRegularExpressionValidator(intReg)  
         self.lineENumber.setValidator(regExpValidator)  
         #三相回路数 1,2,3
-        intReg = QRegExp('[1-3]?')
-        regExpValidator = QRegExpValidator(intReg)  
+        intReg = QRegularExpression('[1-3]?')
+        regExpValidator = QRegularExpressionValidator(intReg)  
         self.lineECircuits.setValidator(regExpValidator)   
 
         self.rbTouch.clicked.connect(self.refreshLayingPic)

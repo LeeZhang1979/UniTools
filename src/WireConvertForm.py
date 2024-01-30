@@ -10,12 +10,12 @@ import sys
 import math
 import datetime
 from turtle import bgcolor
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPalette,QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow,QMessageBox,QFileDialog
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtGui import QPalette,QPixmap, QIcon
+from PyQt6.QtWidgets import QMainWindow,QMessageBox,QFileDialog
 
-from PyQt5 import QtSql
-from PyQt5.QtSql import QSqlQuery
+from PyQt6 import QtSql
+from PyQt6.QtSql import QSqlQuery
 
 from openpyxl import load_workbook,Workbook 
 from openpyxl.styles import Alignment,PatternFill,Color,Border,Font,NamedStyle,Side,borders

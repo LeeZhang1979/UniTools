@@ -8,8 +8,8 @@ import configparser
 import subprocess 
 import ctypes
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QApplication
 
 BASE_DIR= os.path.dirname(os.path.abspath(__file__) )  
 sys.path.append( BASE_DIR  ) 
@@ -89,13 +89,13 @@ def main():
         subprocess.Popen("upgrade.bat")
         sys.exit()
 
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    ##QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv) 
     mwin= MainWindow()
     
     mwin.show()
    
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 if __name__ == '__main__':
     main()
