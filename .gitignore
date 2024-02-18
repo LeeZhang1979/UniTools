@@ -9,3 +9,4 @@ outputs
 ~*.docx
 ~*.doc
 update.bat
+/.vs
