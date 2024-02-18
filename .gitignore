@@ -1,9 +1,9 @@
 #git 忽略目录及文件
 
 __pycache__
-dist
-build
-outputs
+/dist
+/build
+/outputs
 ~*.xlsx
 ~*.xls
 ~*.docx
