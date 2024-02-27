@@ -1,4 +1,4 @@
-1. 下载安装Python 3.13.1版本 https://www.python.org/downloads/
+1. 下载安装Python 3.12.2版本 https://www.python.org/downloads/
     不要用最新版本，很多Python的第三方库及案例代码都采用的较老版本
     https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe
     安装时建议不用安装到默认目录（当前用户的目录），建议在C或D盘的根目录(或Program Files目录)建立Python312目录
@@ -9,13 +9,11 @@
 3. 先安装Visual Studio Code https://code.visualstudio.com/
     下载安装最新版本即可
 
-4. 安装VS Code完成后，右击使用管理员打开VS Code，通过扩展界面安装以下扩展
+4. 安装VS Code完成后，使用管理员打开VS Code，通过扩展界面安装以下扩展
     --以下部分尽量装微软的官方扩展
     Chinese (Simplified) (简体中文) Language Pack for Visual Studio Code
     Python
-    vscode-icons
-
-    --还有更多适合Python开发的扩展，可自行搜索安装，Pylance 等不建议安装（这个强制代码书写规范），部分AI的扩展也不要装，影响性能
+    vscode-icons 
 
 --其它扩展
     SQLite: alexcvzz的版本，安装后可以在VSCode中 按F1进入命令窗口，输入SQLite调出所有SQLite命令，可以选择打开数据库命令 数据库查看MDM数据库内表的内容
